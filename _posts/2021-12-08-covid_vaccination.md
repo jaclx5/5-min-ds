@@ -51,7 +51,3 @@ __352 people is not small deal! Get vaccinated, please!__
 ## Caveats and Sources
 
 The goal on this post was to obtain a rough estimation of the correlation between vaccination and deaths rates in Europe. Rather than a precise number, which would be impossible to compute from this data alone, we want to have a sense of the order of magnitude of the effect of vaccination on the death rates.
-
-
-
-
