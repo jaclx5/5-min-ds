@@ -1,5 +1,5 @@
 ---
-title: Text Comparing with Sequence Alignment Algorithms - Part 2
+title: How to Compare Text with Sequence Alignment Algorithms - Part 2
 layout: post
 author: jaclx5
 ---
@@ -28,12 +28,7 @@ author: jaclx5
     }
 </style>
 
-_In this series of posts I discuss a few approaches on how to apply Bioinformatics sequence alignment tools to general non-exact text comparison and search problems._
-
-Update the end of the first post with more info
-
-> **TLDR**: If you are not interested in the biological or in Bioinformatics in general and want to go directly into the algorithms, you can jump directly to the [second post](xxx).
-
+_In the previous post of this series I described the biological context and appplications of sequence alignment algorithms as a motivation for it's development. In this second post I will go deep into the technical definitions and implementation details.<<rephrase>>_
 
 In the first post of this series I discussed the original biological problems that sequence alignments came to solve. Now we will go deeper into the technical description of alignments.
 

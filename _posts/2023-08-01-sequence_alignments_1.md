@@ -1,5 +1,5 @@
 ---
-title: Text Comparing with Sequence Alignment Algorithms - Part 1
+title: How to Compare Text with Sequence Alignment Algorithms - Part 1
 layout: post
 author: jaclx5
 ---
@@ -52,6 +52,9 @@ In this first post I will present the original Biological motivation that led th
 In the following posts I will present the technical details of pair-wise "optimal alignment" algorithms. Explain what is an "optimal alignment", why it is such a computationally hard problem and how Dynamic Programming approaches solve it (at least partially), and go in depth into the inner workings of the **Needleman-Wunsch** and **Smith-Watterman** algorithms and its implementation.
 
 Later on I will present non optimal alignment algorithms (e.g. **dot plot** and **k-word** approaches for aligning big sequences) and discuss some creative ways of applying alignment algorithms to generic text and full documents.
+
+> **TLDR**: If you are not interested in the biological motivation of alignment algorithms and want to go directly into the technical details, you can jump directly into the [second post](/sequence_alignments_2) of this series.
+
 
 # The Biological Context
 
