@@ -1,0 +1,94 @@
+<!--
+Slideshow container:
+
+How to use this container:
+
+  1/ Define a list of images for the slideshow in the page front-matter.
+
+  my_slideshow:
+    - slide:
+        image: /images/slide01.png
+        caption: caption 1
+    - slide:
+        image: /images/slide02.png
+        caption: caption 3
+
+  Obs: "my_slideshow" can be any name
+
+  2/ Include the container in the page code wher you want the slideshow to be displayed:
+
+  \{\% include slideshow.html slideshow=page.my_slideshow \%\}
+
+  3/ Repeat 1/ and 2/ with a different name for the slide show.
+
+Inspired by:
+  - https://jekyllcodex.org/without-plugin/slider/
+  - https://www.w3schools.com/howto/howto_js_slideshow.asp
+-->
+
+<!--
+TODO:
+- Include caption from captions if exist
+-->
+
+<div class="slideshow-container">
+  <!-- Full-width images with number and caption text -->
+  {% for item in include.slideshow.slides %}
+  
+  <div class="slides mySlides_{{include.slideshow.name}} fade">
+    <div class="numbertext">{{forloop.index}} / {{forloop.length}}</div>
+    <img src="{{item.slide.image}}" style="width:100%">
+    <div class="text">{{item.slide.caption}}</div>
+  </div>
+  {% endfor %}
+
+  <!-- Next and previous buttons -->
+  <a class="prev" onclick="plusSlides_{{include.slideshow.name}}(-1)">&#10094;</a>
+  <a class="next" onclick="plusSlides_{{include.slideshow.name}}(1)">&#10095;</a>
+</div>
+<!-- The dots/circles -->
+<div style="text-align:center">
+  {% for image in include.slideshow.slides %}
+  <span class="dots myDots_{{include.slideshow.name}}" onclick="currentSlide_{{include.slideshow.name}}({{forloop.index}})"></span>
+  {% endfor %}
+</div>
+
+<!-- Initializes the slideshow -->
+<script type="text/javascript">
+let slideIndex_{{include.slideshow.name}} = 1;
+showSlides_{{include.slideshow.name}}(slideIndex_{{include.slideshow.name}});
+
+// Next/previous controls
+function plusSlides_{{include.slideshow.name}}(n) {
+  showSlides_{{include.slideshow.name}}(slideIndex_{{include.slideshow.name}} += n);
+}
+
+// Thumbnail image controls
+function currentSlide_{{include.slideshow.name}}(n) {
+  showSlides_{{include.slideshow.name}}(slideIndex_{{include.slideshow.name}} = n);
+}
+
+function showSlides_{{include.slideshow.name}}(n) {
+  let i;
+  let slides = document.getElementsByClassName("mySlides_{{include.slideshow.name}}");
+  let dots = document.getElementsByClassName("myDots_{{include.slideshow.name}}");
+  
+  if (n > slides.length) {
+    slideIndex_{{include.slideshow.name}} = 1
+  }
+  
+  if (n < 1) {
+    slideIndex_{{include.slideshow.name}} = slides.length
+  }
+  
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex_{{include.slideshow.name}}-1].style.display = "block";
+  dots[slideIndex_{{include.slideshow.name}}-1].className += " active";
+}
+</script>

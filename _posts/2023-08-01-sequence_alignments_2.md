@@ -2,7 +2,58 @@
 title: How to Compare Text with Sequence Alignment Algorithms - Part 2
 layout: post
 author: jaclx5
+
+greedy:
+    name: greedy
+    slides:
+        - slide:
+            image: /images/sequence_alignments/greedy/greedy_slide_resized_00.png
+            caption: In the first step we explore the three operations expanding from the start "empty" alignment (GREEN box).<BR/> The best obtained alignment (P/P) is represented by the RED box.
+        - slide:
+            image: /images/sequence_alignments/greedy/greedy_slide_resized_01.png
+            caption:  Expand the (P/P) alignment.
+        - slide:
+            image: /images/sequence_alignments/greedy/greedy_slide_resized_02.png
+            caption:  Expand the (P/P) alignment.
+        - slide:
+            image: /images/sequence_alignments/greedy/greedy_slide_resized_03.png
+            caption: Expand the (PO/PU) alignment.
+        - slide:
+            image: /images/sequence_alignments/greedy/greedy_slide_resized_04.png
+            caption: Hello there 1
+        - slide:
+            image: /images/sequence_alignments/greedy/greedy_slide_resized_05.png
+            caption: Hello there 1
+        - slide:
+            image: /images/sequence_alignments/greedy/greedy_slide_resized_06.png
+            caption: Hello there 1
+        - slide:
+            image: /images/sequence_alignments/greedy/greedy_slide_resized_07.png
+            caption: Hello there 1
+        - slide:
+            image: /images/sequence_alignments/greedy/greedy_slide_resized_08.png
+            caption: Hello there 1
+        - slide:
+            image: /images/sequence_alignments/greedy/greedy_slide_resized_09.png
+            caption: Hello there 1
+        - slide:
+            image: /images/sequence_alignments/greedy/greedy_slide_resized_10.png
+            caption: Hello there 1
+        - slide:
+            image: /images/sequence_alignments/greedy/greedy_slide_resized_11.png
+            caption: Hello there 1
 ---
+
+[[REREAD THE WHOLE POST AND CHECK:
+- IMprove the grredy alignment diagrams, caption and check the consistency with the explanation in the text.
+
+- Consistent use of pronouns:
+    "I" - if my option when writing the post.
+    "we" - if it the community the subject.
+    "you" - if I'm directly talking to the reader
+
+- Consistent naming of the concept.
+]]
 
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
@@ -28,78 +79,77 @@ author: jaclx5
     }
 </style>
 
-_In the previous post of this series I described the biological context and appplications of sequence alignment algorithms as a motivation for it's development. In this second post I will go deep into the technical definitions and implementation details.<<rephrase>>_
+_In the previous post I described the original biological context and questions that sequence alignments came to answer. In this post I will one step further into the formal definition of alignments_
 
-In the first post of this series I discussed the original biological problems that sequence alignments came to solve. Now we will go deeper into the technical description of alignments.
 
 > Check also the [companion notebook](add companion address) (more info at the [end of the post](#code)). 
 
-I this second post I will focus on "Optimal Sequence Alignments". But first lets start by formally defining Sequence Alignment.
+# How to Define an Alignment?
 
+If you had the opportunity to read my [previous post](/sequence_alignments_1), I hope you built a good intuition about what an alignment is and what is it good for. In this post I want to go a step further into analyzing sequence alignments and devising effective algorithms to build them automatically. To achieve this, intuition is important but not enough. We need to formally define sequence alignments and establish a way to quantify how "_good_" they are.
 
-# What is an Alignment?
+## Let's get formal
 
-An alignment between two sequences of letters $$A$$ and $$B$$ is a succession of "changes" on $$A$$ that will transform it on $$B$$. To simplify the analysis of alignment algorithms we consider only atomic "changes", i.e., the possible changes can only be one of the following ($$A_i$$ corresponds to the letter in the $$i^{th}$$ position of $$A$$):
-- Replace any element $$A_i$$ by any other letter of the vocabulary.
-- Delete any element  $$A_j$$.
-- Insert an element after or before position $$k$$.
+If $$A$$ and $$B$$ are two sequences of letters of an alphabet, an alignment between them is a succession of "operations" on $$A$$ that will make it identical to $$B$$.
 
-As a simple example lets take two very short sequences "POINTER" and "PUNTER".
+Let $$A_i$$ the letter in the $$i^{th}$$ position of $$A$$. The operations required to perform an alignment can be:
+- __MATCH__: Keep $$A_i$$ unchanged.
+- __MISMATCH__: Replace $$A_i$$ by a letter of the alphabet.
+- __GAP__, can be either:
+    - Delete $$A_i$$, shifting all remaining letters to the left, i.e., $$\forall j : j > i, A_{j-1} \leftarrow A_{j}$$).
+    - Insert a letter of the alphabet in position $$i$$, shifting all remaining letters to the right, i.e., $$\forall j : j > i, A_j \rightarrow A_{j+1}$$.
 
-[[change the background to make it visually nicer]]
-[[check here for inspiration: https://medium.com/@clem.boin/creating-a-minimal-kernel-development-setup-using-qemu-and-archlinux-987896954d84]]
+Lets take the two following short sequences as an example:
 
-<pre>
+<pre class="graybox">
 <code class="python">
     A = POINTER
     B = PUNTER
 </code>
 </pre>
 
-A possible alignment could be the obtained by performing the following two changes:
+> _In the examples bellow we represent MATCHES with a "\|", GAPs with a "-", and MISMATCHES with a "x"._
+
+A possible alignment could be the obtained by performing the following two operations:
 
 - Replace $$A_2$$ by "U"
 - Delete $$A_3$$
+- Keep all other positions unchanged.
 
-The resulting alignment would be:
-
-<pre>
+<pre class="graybox">
 <code class="python">
     A = POINTER
-         x-
+        |x-||||
     B = PU-NTER
 </code>
 </pre>
 
-Note that although the alignment above seems somehow "natural", there's nothing special about it. The following alternative list of changes:
+Note that although the alignment above seems somehow "natural", there's nothing special about it. The following alternative sequence of operations produces an equally valid alignment:
 
 - Delete $$A_2$$
-- Insert an "U" before position $$2$$
+- Insert "U" in $$A_2$$
 - Delete $$A_3$$
+- Keep all other positions unchanged.
 
-Produce an equally valid alignment:
-
-<pre>
+<pre class="graybox">
 <code class="python">
     A         = PO-INTER
-                 ---
+                |---||||
     B         = P-U-NTER
 </code>
 </pre>
 
-In the extreme (and clearly silly) case one could consider changing all letters:
+A last extreme example (and quite silly by the way) would be to delete all letters from sequence $$A$$ and inserting each letter of sequence $$B$$ in their positions:
 
-- Delete $$A_1$$ to $$A_7$$
-- Insert an "P" in position $$1$$
-- Insert an "U" after position $$1$$
-- Insert an "N" after position $$2$$
-- Insert an "T" after position $$3$$
-- Insert an "E" after position $$4$$
-- Insert an "R" after position $$5$$
+- Delete $$A_1 \times 7$$ (note that, due to the shift, $$A_1$$ iterates over each letter of $$A$$)
+- Insert "P" in $$A_1$$
+- Insert "U" in $$A_2$$
+- Insert "N" in $$A_3$$
+- Insert "T" in $$A_4$$
+- Insert "E" in $$A_5$$
+- Insert "R" in $$A_6$$
 
-Which would produce an also valid (although not very useful as we will see in a moment) alignment:
-
-<pre>
+<pre class="graybox">
 <code class="python">
     A         = POINTER------
                 -------------
@@ -107,28 +157,17 @@ Which would produce an also valid (although not very useful as we will see in a 
 </code>
 </pre>
 
-_In the examples above we added the symbol «-» in the position of the deleted/inserted letters to facilitate the comparison. Those «-», of course, are not part of the sequence._
+## Some Alignments Are Better Than Others
 
-From the examples bellow we can easily intuit that there are a huge number of possible alignments between two sequences, in fact for those tiny sequences we can expect almost 20000 possible alignments ([check here for an exact formula](end of the post)). The question that arises is how to choose from all those possible alignments the _best_ one?
+From the examples above it is easy to imagine that a huge number of possible alignments between two sequences exists. In fact, for those two small sequences there are [almost 20000 possible alignments](#note1).
 
-There is not a single answer to the question. The _best_ alignment depends on what do we want to achieve with it. Intuitively we would prefer the alignment resulting from the smallest number of changes, which in our example would be the first proposed alignment. However, real world applications have specific goals and/or restrictions. Sometimes we aim to minimize insertions or deletions. In other cases we want to avoid specific letters substitutions, in the protein alignment field a lot of work has been done to determine which substitutions are _better_ than others ([see here](https://en.wikipedia.org/wiki/Substitution_matrix)).
+With so many possible alignments the question that arises is: __"How to find _the best alignment_ of all?"__
 
-The discussion on how to choose the best alignment lead us to the definition of __optimal alignment__
+In order to answer this question we must compute a score for each alignment and choose, as the "[best alignment](#note2)", the one with the highest score. A simple way to define a score is to assign a value to each operation that generates the alignment.
 
+As a simple example lets take the first of the above alignments:
 
-# Optimal Alignment
-
-In order to choose the optimal alignment from the set of all possible alignments we need find a way to assign some kind of score to each alignment so we can compare them all against each other. A simple way to define a score is to evaluate each position of the alignment and assign some value depending on the aligned letters in that position.
-
-lets assume that $$A_i$$ and $$B_i$$ represent the $i^{th}$ position of the __aligned__ sequences $$A$$ and $$B$$. It's easy to see that we have three possible pairing situations:
-
-- A __MATCH__  if positions $$A_i$$ and $$B_i$$ are identical (represented by the _pipe_ character "|").
-- A __MISSMATCH__ if positions $$A_i$$ and $$B_i$$ are different (represented by an "x").
-- A __GAP__ if either $$A_i$$ or $$B_i$$ contain a "-" after the alignment (conveniently represented by an "-").
-
-As a simple example lets take the first alignment of the example above:
-
-<pre>
+<pre class="graybox">
 <code class="python">
     A = POINTER
         |x-||||
@@ -137,17 +176,17 @@ As a simple example lets take the first alignment of the example above:
 </pre>
 
 This alignment consisted on:
-- 5 MATCHEs in positions 1, 4, 5, 6 and 7.
-- 1 MISSMATCH in position 2
-- 1 GAP in position 3
+- 5 MATCHEs
+- 1 MISSMATCH
+- 1 GAP
 
-If now we assign an individual and arbitrary value to each pairing say: MATCH=3, MISSMATCH=-1, GAP=-2 and sum all the pairings we obtain a total score for the whole alignment.
+If we assign an arbitrary value to each operation say: $$MATCH=3$$, $$MISSMATCH=-1$$, $$GAP=-2$$, and sum all these values we obtain a total score for the whole alignment:
 
-The alignment would then score $$(5 \times 3) + (1 \times -1) + (1 \times -2) = 12$$
+$$(5 \times 3) + (1 \times -1) + (1 \times -2) = 12$$
 
-The same way the for the remaining two examples we would have scores of $$(5 \times 3) + (3 \times -2) = 9$$:
+The same way the for the remaining two examples we would have scores of:
 
-<pre>
+<pre class="graybox">
 <code class="python">
     A         = PO-INTER
                 |---||||
@@ -155,9 +194,11 @@ The same way the for the remaining two examples we would have scores of $$(5 \ti
 </code>
 </pre>
 
-And $$(13 \times -2) = -26$$:
+$$(5 \times 3) + (0 \times -1) + (3 \times -2) = 9$$
 
-<pre>
+And:
+
+<pre class="graybox">
 <code class="python">
     A         = POINTER------
                 -------------
@@ -165,43 +206,113 @@ And $$(13 \times -2) = -26$$:
 </code>
 </pre>
 
-In this example the first alignment is clearly the best one of the three (as we would probably expect).
+$$(0 \times 3) + (0 \times -1) + (13 \times -2) = -26$$
 
-A few observations are worth mentioning at this point.
+In this example, the first alignment is clearly the "_best_" of the three. Notice that, in this context, "_best_" means "_the one with a higher score_". 
 
-First, it's easy to see that playing with the values assigned to each pair we can change the final scores dramatically. So the choice of values must have in mind the practical objectives of the alignment. When comparing biological sequences (DNA or Proteins) the goal is to "reconstruct" the evolutionary history of each position of the sequences (nucleotide or amino acid), thus a lot of research was dedicated to infer those values (see the [substitution matrices](link to Wikipedia) for more information). In our case, when comparing text values that promote matches and penalize more or less equally mismatches and gaps tend to work well.
+Note that the score depends on values __arbitrarily__ assigned to each one operation. If we would make a different choice of values, say: $$MATCH=0$$, $$MISSMATCH=0$$, $$GAP=1$$, we would obtain different alignment scores:
 
-Second, the absolute value of each alignment's score is not important by itself. We are only interested in the maximum score of all alignments. That does not mean that the values as meaning less. Coming back to biological sequences, the values assigned to each match/mismatch are [[check in the refernce here - the log prob of a mutation....]]
+- <code>Alignment 1</code>: $$(5 \times 0) + (1 \times 0) + (1 \times 1) = 1$$
+- <code>Alignment 2</code>: $$(5 \times 0) + (0 \times 0) + (3 \times 1) = 3$$
+- <code>Alignment 3</code>: $$(0 \times 0) + (0 \times 0) + (13 \times 1) = 13$$
 
-Finally, and more important for our discussion here, we still don't know how to __find__ the best score. [[end this sentence and motivate the following]]
+With these new values, the 3rd alignment becomes the "_best_", even if it does not look like a good alignment.
+
+The point here is that the concept of "_best alignment_" depends on what we want to do with it. In certain scenarios we would prefer the alignment with the smallest number of changes, which, in our example, would be the first one. In other cases, however, we would want to explicitly avoid certain letters substitutions. Each real world application of the alignment have different goals and, for each of these goals, a specific assignment of values must to be fine tuned.
+
+An actual example is the comparison of biological sequences (DNA or Proteins). Here the goal is to "reconstruct" the evolutionary history of each position of the [original sequence](#note3)  of nucleotides (for DNA) or amino acids (for proteins). Computational Biologists dedicate a lot of effort to infer the most probable changes to DNA or proteins during the evolutionary process (also called "_mutations_"), and also to compute the pairing values that will produce the alignments that best reflect those probabilities. The result is a [__Substitution Matrix__](https://en.wikipedia.org/wiki/Substitution_matrix) in which each pair of nucleotide or amino acids substitutions have its specific value.
+
+## Pause for Recap
+
+A few observations are worth mentioning at this point:
+
+First, the concept of "_best alignment_" is known in the technical literature as **_optimal alignment_**, according to the mathematical meaning of [optimization](https://en.wikipedia.org/wiki/Mathematical_optimization). This is the name we will use from now on.
+
+Second, it's easy to see that playing with the values assigned to each pairing will impact the final alignment score dramatically. So, the choice of values must have in mind the practical objectives of the alignment. In this post I'm caring most about comparing text, so the values of the first example ($$MATCH=3$$, $$MISSMATCH=-1$$, $$GAP=-2$$) that promote matches and penalize a little less mismatches than gaps, tend to work well.
+
+Third, the absolute value of each alignment's score is not important by itself. We are only interested in the alignment with the maximum score. This does not mean that the values are always meaningless. In the case of the [__Substitution Matrixes__](https://en.wikipedia.org/wiki/Substitution_matrix) mentioned above the values assigned to each pairing is related with the [probability of observing the mutation in nature](https://en.wikipedia.org/wiki/Substitution_matrix#Log-odds_matrices)
+
+
+**** vvv CONTINUE HERE vvv
+MAYBE SPLIT HERE THE POSTS AND MAKE THIS THE END OF THE SECOND ONE
+
+
 
 # Alignment Algorithms
 
-## Brute Force Approach
+At this point we know everything about how to define and quantify alignments. We still don't know, though, __how to find the optimal alignment__ score. In the remaining of this post we will explore some algorithms that, given a pair of sequences and the values for each pairing operation, return the **_optimal alignment_** for those two sequences.
 
-Now that we know how to compute a numerical score for any assignment e need to find a way to search for the best overall alignment, a.k.a. the optimal alignment.
+## Greedy Approach - A False Start
 
-Lets start by illustrating a brute force approach to optimal alignment search:
+A straightforward, although _naïve_, way to search for the optimal alignment would be to systematically try the possible alignment operations, "greedily" choosing each next step according to the best score found so far.
 
-[[graphical element]]
+The sequence of images bellow illustrates this __greedy__ algorithm on our familiar sequences: <code class="python">POINTER</code> and <code class="python">PUNTER</code>:
 
-As we can see in each step of the process we have three potential actions:
+{% include slideshow.html slideshow=page.greedy %}
 
-- Align the next letter from both sequences (either with a MATCH or MISMATCH).
-- Align the next letter from $$A$$ sequence adding a GAP to sequence $$B$$.
-- Align the next letter from $$B$$ sequence adding a GAP to sequence $$A$$.
+In the first step you can see that we started with an _empty_ alignment with an obvious score of 0 and expanded it by applying the three possible operations:
 
-After each of the steps the process repeats until one of the sequences is exhausted and GAPs are added to the remaining letters of the other sequence.
+- Align the next letter from the top sequence adding a GAP to the bottom sequence, obtaining a score of -2.
+- Align the next letters from both sequences, obtaining a score of 3 due to the MATCH.
+- Align the next letter from the bottom sequence adding a GAP to the top sequence, obtaining a score of -2.
 
-As it progresses, the algorithm recursively builds a ternary tree containing in its leaves the complete alignments. When no more expansion are possible we just have to look for the maximum score alignment, we are done!
+The __green__ box represents the expanded node and the __red__ box the best alignment obtained so far.
 
-Of course, due to the huge number of possible alignments, the brute force approach is completely impractical for all but the smallest sequences. However it provides us with a intuition for the dynamic programming algorithm.
+Now, we repeat the same process expanding the best node found so far, thus the __greedy__ nature of the algorithm. We keep repeating it until we "exhaust" both sequences.
+
+As it progresses, the algorithm recursively builds a ternary tree containing in its leaves the many alternative alignments.
+
+Notice that, due to the accumulation of gaps and mismatches, in some steps (e.g., step 4, 7), the next best alignment does not result from the one previously expanded. In theses cases the algorithm backtracks to explore other branches of the expansion tree.
+
+As you may already guessed, from the title of this section, although this algorithm seems pretty effective, it is not guarantee to find the best alignment. As it usual with all greedy algorithms.
+
+Check this simple counter example:
+
+$$s1 = ABC$$
+$$s2 = ABXABC$$
+
+The greedyness of the algorithm forces it to explore what looks like a promising path, immediately aligning the three first letters of both sequences, which leads to the following sub-optimal alignment:
+
+{% include slideshow.html slideshow=page.greedy2 %}
+
+<pre class="graybox">
+<code class="python">
+    ABC---
+    ||x---
+    ABXABC
+</code>
+</pre>
+
+$$(2 \times 3) + (1 \times -1) + (3 \times -2) = -1$$
+
+It's easy to see in this case that the alternative alignment would be better:
+
+<pre class="graybox">
+<code class="python">
+    AB---C
+    ||---|
+    ABXABC
+</code>
+</pre>
+
+$$(3 \times 3) + (0 \times -1) + (3 \times -2) = 0$$
+
+To find this alignment we would need to back track and explore all options which would be a "__Brute Force__" approach, i.e., test all possibilities to make sure we find the optimal alignment.
+
+Of course, due to the huge number of possible alignments, the brute force approach would be completely impractical for all but the smallest sequences.
+
+<div align="center">
+    <img src="/images/sequence_alignments/greedy/full_sample.png" height="300"/>
+</div>
+
+Fortunately not everything are bad news. We still can find the optimal alignment without having to explore all possible alignments. With the intuition we acquired exploring the greedy approach and discussing the brute force approach it will be easier to understand the best approach so far to discover optimal alignments: The __Dynamic Programming__ algorithm.
+
 
 ## Dynamic Programming
 
-Dynamic Programming was proposed in the 1950s by Richard Bellman (the choice of the name "Dynamic Programming" has a curious motivation as told by [Bellman himself in his autobiography](#Bellman1984)), it is a general optimization method applicable to a large class of problems well beyond sequence alignment. It's an elegant and useful method which description is out of the scope of this post but which is worth to [explore further](https://en.wikipedia.org/wiki/Dynamic_programming).
+Dynamic Programming was proposed in the 1950s by Richard Bellman (the choice of the name "Dynamic Programming" has a curious motivation as told by [Bellman himself in his autobiography](#Bellman1984)), it is a general optimization method applicable to a large class of problems well beyond sequence alignment, really worth to be [further explored](https://en.wikipedia.org/wiki/Dynamic_programming).
 
-To get to the intuition behind dynamic programming let change slightly or brute force algorithm. Instead of expanding all possible combinations of actions we will expand only the most "promising" ones:
+To get the fundamental concept behind the __dynamic programming__ lets slightly change or brute force algorithm. Instead of expanding all possible combinations of actions we will expand only the most "promising" ones:
 
 [[create a chart with the order of exploration expanding only the best nodes at each moment]]
 
@@ -303,26 +414,34 @@ In the next post we will show how to implement a Python version of both the NW a
 
 For now we are done!
 
-# End Notes
 
-## Exact formula for the number of pair wise sequence alignments
 
-In [this article](#Torres2004) the authors propose the following formula for the total number of possible alignments between a pair of sequences of sizes $$m$$ and $$n$$:
+
+
+
+# Notes
+
+__<a name="note1">[1]</a>__ The following exact formula for the total number of alignments between a pair of sequences of sizes $$m$$ and $$n$$ was derived by [Torres et al.](#Torres2004):
 
 $$f(m, n) = \sum^{min(m, n)}_{k=0} {2^k {m \choose k} {n \choose k}}$$
 
-<pre>
-<code class="python">
-    from math import comb
-    
-    def f(m, n):
-        return sum([(2**k) * comb(m, k) * comb(n, k) for k in range(0, min(m, n))])
+The following Python code computes the number of alignments for two sequences of sizes $$7$$ and $$6$$:
 
-    print(f(7, 6))
-</code>
+<pre class="graybox">
+<code class="python">from math import comb
+
+def f(m, n):
+    return sum([(2**k) * comb(m, k) * comb(n, k) for k in range(0, min(m, n))])
+
+print(f(7, 6))
+
+>>> 19377</code>
 </pre>
 
+__<a name="note2">[2]</a>__ This definition of "best" may seem a little artificial. I hope it will become clear, later in the post, that there is a more profound motivation for it.
 
+
+__<a name="note3">[3]</a>__ In this case the original sequence is the _ancestor_ sequence of the ones being compared.
 
 # References
 
@@ -336,8 +455,6 @@ Needleman, Saul B. & Wunsch, Christian D. (1970). "A general method applicable t
 Smith, Temple F. & Waterman, Michael S. (1981). "Identification of Common Molecular Subsequences" (PDF). Journal of Molecular Biology. 147 (1): 195–197. CiteSeerX 10.1.1.63.2897. doi:10.1016/0022-2836(81)90087-5. PMID 7265238.
 
 [ref] Eddy, S., "What is dynamic programming?", 2004, Nature Biotechnology, 22 (7), 909-910
-
-
 ==== THIRD POST ===
 
 - **_Dot Plot_ methods (graphic and MUMMER)**
@@ -353,6 +470,7 @@ If you have questions or ideas feel free to share them in the comments box.
 
 
 https://mummer.sourceforge.net/
+https://github.com/ashvardanian/Stringzilla?utm_source=tldrnewsletter
 
 ==== FOURTH POST ===
 
