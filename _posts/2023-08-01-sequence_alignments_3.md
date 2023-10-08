@@ -1,5 +1,5 @@
 ---
-title: How to Compare Text with Sequence Alignment Algorithms - Part 2
+title: How to Compare Text with Sequence Alignment Algorithms - Part 3
 layout: post
 author: jaclx5
 
