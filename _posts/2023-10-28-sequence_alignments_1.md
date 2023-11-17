@@ -4,6 +4,8 @@ layout: post
 author: jaclx5
 ---
 
+_In this series of posts I will discuss how to apply Bioinformatics sequence alignment algorithms to general text comparison and search problems, the ones we typically encounter on document processing and NLP projects._
+
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
 <style>
@@ -28,7 +30,6 @@ author: jaclx5
     }
 </style>
 
-_In this series of post I will discuss how to apply Bioinformatics sequence alignment algorithms to general text comparison and search problems, the ones we typically encounter on document processing and NLP projects._
 
 Every once in a while, in the middle of a busy work day, a "fuzzy" (non-exact) text comparison problem pops up:
 
@@ -198,9 +199,9 @@ Now, we can see that the real similarity is around 80% on the whole gene. What w
 
 This is what alignments are used for in Bioinformatics: To allow Biologists to compare sequences in a meaningful way, and to probe the real evolutionary relationship between sequences, namely to understand (among other things):
 
-- Which nucleotides are conserved (didn't change) since the last common ancestor [[1]](#note1).
+- Which nucleotides are conserved (didn't change) since the last common ancestor <a name="1eton"/>[[1]](#note1).
 - Which nucleotides were replaced by other nucleotides.
-- Which nucleotides were inserted/deleted in any of the sequences [[2]](#note2).
+- Which nucleotides were inserted/deleted in any of the sequences <a name="2eton"/>[[2]](#note2).
 - How evolutionary distant two sequences (and species) are.
 
 And this is not a small feat!
@@ -217,7 +218,7 @@ I have good and not so good news.
 
 The good news is that we can easily quantify the _goodness_ (pun no intended) of any alignment. We can even identify the best alignment of all, i.e., the "Optimal Alignment".
 
-The less good news is that the challenge of finding the optimal alignment between a pair of sequences is a computationally hard problem [[3]](#note3), which renders optimal alignment algorithms impractical for really big sequences (e.g. genome size sequences).
+The less good news is that the challenge of finding the optimal alignment between a pair of sequences is a computationally hard problem <a name="3eton"/>[[3]](#note3), which renders optimal alignment algorithms impractical for really big sequences (e.g. genome size sequences).
 
 The balance between obtaining the optimal alignment for limited size sequences or an approximate alignment for big sequences, led to the development of several types of alignment algorithms:
 
@@ -225,22 +226,22 @@ The balance between obtaining the optimal alignment for limited size sequences o
 - **_Dot Plot_ algorithms**, which find similar regions in big sequences.
 - **_K-word_ algorithms**, which search for similar sequences on huge databases of sequences.
 
-On the upcoming posts we will explore each one of these types of algorithms in detail [[4]](#note4).
+On the upcoming posts we will explore each one of these types of algorithms in detail <a name="4eton"/>[[4]](#note4).
 
 # Next Steps
 
-I hope I could wet you appetite for this subject. In the next post we will formally define alignments and discover how to quantify how good they are.
+I hope I could wet you appetite for this subject. In the [next post](/sequence_alignments_2) we will formally define alignments and discover how to quantify how good they are.
 
 
 # Notes
 
-__<a name="note1">[1]</a>__ Note that whenever we find the same nucleotide in a similar (homologous) position in two sequences we cannot exclude the possibility of the occurrence of reversible mutations, i.e., a sequence of mutations that, over time, made both positions the same again:$$G \rightarrow T \rightarrow G$$.
+<a name="note1" />__[[1]](#1eton)__ Note that whenever we find the same nucleotide in a similar (homologous) position in two sequences we cannot exclude the possibility of the occurrence of reversible mutations, i.e., a sequence of mutations that, over time, made both positions the same again:$$G \rightarrow T \rightarrow G$$.
 
-__<a name="note2">[2]</a>__ In reality we cannot distinguish, from sequence alone, if the historical mutation was an insertion in one sequence or a deletion in the other sequence.
+<a name="note2" />__[[2]](#2eton)__ In reality we cannot distinguish, from sequence alone, if the historical mutation was an insertion in one sequence or a deletion in the other sequence.
 
-__<a name="note3">[3]</a>__ Optimal alignment algorithms have a time and memory complexity of $$\mathcal{O}(n \times m)$$.
+<a name="note3" />__[[3]](#3eton)__ Optimal alignment algorithms have a time and memory complexity of $$\mathcal{O}(n \times m)$$.
 
-__<a name="note4">[4]</a>__ It is important to mention that in this series of posts I am only considering pairwise sequence alignments. Multiple sequence alignment algorithms, like [Clustal](http://www.clustal.org/), also exist and are pretty useful, but we will not explore them,at least for now.
+<a name="note4" />__[[4]](#4eton)__ It is important to mention that in this series of posts I am only considering pairwise sequence alignments. Multiple sequence alignment algorithms, like [Clustal](http://www.clustal.org/), also exist and are pretty useful, but we will not explore them,at least for now.
 
 
 # References
