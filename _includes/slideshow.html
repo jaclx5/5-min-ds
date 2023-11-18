@@ -26,11 +26,6 @@ Inspired by:
   - https://www.w3schools.com/howto/howto_js_slideshow.asp
 -->
 
-<!--
-TODO:
-- Include caption from captions if exist
--->
-
 <div class="slideshow-container">
   <!-- Full-width images with number and caption text -->
   {% for item in include.slideshow.slides %}
@@ -38,7 +33,7 @@ TODO:
   <div class="slides mySlides_{{include.slideshow.name}} fade">
     <div class="numbertext">{{forloop.index}} / {{forloop.length}}</div>
     <img src="{{item.slide.image}}" style="width:100%">
-    <div class="text">{{item.slide.caption}}</div>
+    <div class="caption_text">{{item.slide.caption}}</div>
   </div>
   {% endfor %}
 

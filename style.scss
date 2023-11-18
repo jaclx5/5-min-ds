@@ -378,10 +378,11 @@ footer {
 }
 
 /* Caption text */
-.text {
+.caption_text {
   color: #303030;
 
-  font-size: 15px;
+  font-family: $narrow;
+  font-size: 12px;
   padding: 8px 12px;
   position: absolute;
   bottom: 8px;

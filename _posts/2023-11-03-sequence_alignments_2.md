@@ -51,7 +51,7 @@ Let $$A_i$$ represent the letter in the $$i^{th}$$ position of sequence $$A$$ be
 
 > Both __INSERTIONS__ and __DELETIONS__ will generically refered as __GAPS__.
 
-To make things less abstract we will take the two following short sequences:
+<a name="external1" />To make things less abstract we will take the two following short sequences:
 
 {% highlight markdown %}
 A = POINTER
