@@ -105,6 +105,11 @@ class AlignmentNode(Node):
 
     score = property(fget=_get_score, doc="Computed score of the alignment.")
 
+    def _get_coords(self):
+        return self._i, self._j
+
+    coords = property(fget=_get_coords, doc="Positions to be aligned next.")
+
     def _can_consume_seq1(self):
         return self._i < len(self._seq1)
 

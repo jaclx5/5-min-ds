@@ -1,10 +1,8 @@
-import math
-
 from .alignment import Alignment
 from .algorithm import *
 
 class AlgorithmGreedy(Algorithm):
-    def run(self, aln:Alignment, max_steps:int=math.inf):
+    def run(self, aln:Alignment, max_steps:int):
         """
         Run at most `max_steps` steps of the greedy algorithm, or until it finds the solution.
         At the end of the run a tree representing a state of the algorithm is produced and can be

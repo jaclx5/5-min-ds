@@ -1,10 +1,8 @@
-import math
-
 from .alignment import Alignment
 from .algorithm import *
 
 class AlgorithmBruteForce(Algorithm):
-    def run(self, aln:Alignment, max_steps):
+    def run(self, aln:Alignment, max_steps:int):
         """
         Run at most `max_steps` steps of the brute force algorithm, or until it finds the solution.
         At the end of the run a tree representing a state of the algorithm is produced and can be
