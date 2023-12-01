@@ -83,8 +83,8 @@ greedy2:
             caption: ...and decrease.
         - slide:
             image: /images/sequence_alignments/greedy2/step_12.png
-            caption: Finally, and due to the long sequences of gaps<br />
-                     The unassuming alignment (ABC--/ABXAB) ends up as the best alignment.
+            caption: Finally, The unassuming alignment (ABC--/ABXAB)<br />
+                     ends up as the best alignment to explore.
         - slide:
             image: /images/sequence_alignments/greedy2/step_13.png
             caption: Which leads to a (premature) solution.
@@ -170,7 +170,7 @@ As we can see in this example, the greedyness of the algorithm, and the fact tha
 
 $$(2 \times 3) + (1 \times -1) + (3 \times -2) = -1$$
 
-How do I know it is not the optimal one? Because I can, with a little manual effort, find an alignment with a higher score:
+How do I know this is not the optimal alignment? Because, with a little manual effort, I can find an alignment with a higher score:
 
 {% highlight markdown %}
     AB---C
@@ -180,7 +180,7 @@ How do I know it is not the optimal one? Because I can, with a little manual eff
 
 $$(3 \times 3) + (0 \times -1) + (3 \times -2) = 3$$
 
-Note that usually it is practically impossible to manually verify if a specific solution is the optimal one or not. The only point I am making here is that, with this counter-example, I can prove that the greedy approach some times fails.
+Of course it is impossible, for all but the shortest alignments, to manually verify if a specific solution is the optimal one or not. The point I am making here is that, with this simple counter-example, I can prove that the greedy approach some times fails.
 
 At least in the sequence alignment world, greed doesn't pay of.
 
@@ -204,6 +204,7 @@ If you search patiently, you will spot the optimal alignment, mentioned above, i
     <img src="/images/sequence_alignments/full_brute_force_detail.png"/>
 </div>
 
+# Next Steps
 
 At his point you may ask: "_Why are we wasting time with flawed and impractical algorithms?_".
 
