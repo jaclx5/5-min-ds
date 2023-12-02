@@ -116,7 +116,7 @@ greedy2:
 
 _In the [previous post](/sequence_alignments_2) I formally defined sequence alignments and described a way to compute a score for how "good" an alignment is. This score allows us to compare alignments between two sequences against each other which is key to help us find the best alignment of all, the optimal one. In this post I will start exploring algorithms to automatically find this optimal alignment between two sequences._
 
-> Check also the [companion notebook](add companion address) (more info at the [end of the post](#code)). 
+> Check also the [companion notebook](https://github.com/jaclx5/jaclx5.github.io/tree/master/notebooks/sequence_alignment) (more info at the [end of the post](#code)). 
 
 # Alignment Algorithms
 
@@ -216,3 +216,14 @@ Second, and most important, understanding how a basic algorithm works allows us 
 
 Fortunately, we still can find the optimal alignment without having to explore all possible alignments. The solution is a technique call Dynamic Programming and that is what we will see in the next post.
 
+<a name="code"/>
+
+# The Code
+
+You can reproduce all the images from this post using the [companion notebook](https://github.com/jaclx5/jaclx5.github.io/blob/master/notebooks/sequence_alignment/alignment_tree/demo.ipynb).
+
+In the repository you will find the package [dalt](https://github.com/jaclx5/jaclx5.github.io/blob/master/notebooks/sequence_alignment/alignment_tree/dalt) which allows you to try your own algorithms and see the resulting trees.
+
+__It's important to note that the algorithms in this package ARE NOT efficient and ARE NOT intended to be used in any practical way. They were developed uniquely to illustrate the concepts in this post and to generate graphical representations of alignments for pedagogic purposes.__
+
+If you have questions or ideas feel free to share them in the comments box. 
