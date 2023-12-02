@@ -43,9 +43,9 @@ exposes the following classes:
 
 ## The Algorithms
 
-__It's important to note that the algorthms in this package ARE NOT efficient NOT indented to be
-used in any practical way. They were developed uniquely to illustrate the concepts and generate
-graphical representations__
+__It's important to note that the algorithms in this package ARE NOT efficient and ARE NOT intended
+to be used in any practical way. They were developed uniquely to illustrate the concepts in this
+blog and to generate graphical representations of alignments for pedagogic purposes.__
 
 - `AlgorithmGreedy` (algorithm_greedy.py): Implements the greedy algorithm described in the [Third
   Post](https://jaclx5.github.io/sequence_alignments_3) of the series. Allways explore the best

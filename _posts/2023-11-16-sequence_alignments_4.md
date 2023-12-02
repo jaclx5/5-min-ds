@@ -29,9 +29,9 @@ author: jaclx5
     }
 </style>
 
-_In the [previous post](/sequence_alignments_3) we starting exploring sequence alignment algorithms with the greedy and brute force approaches... now it'a time for dynamic programming._
+_In the [previous post](/sequence_alignments_3) we start exploring sequence alignment algorithms with the greedy and brute force approaches... now it's time for dynamic programming._
 
-> Check also the [companion notebook](add companion address) (more info at the [end of the post](#code)). 
+> Check also the [companion notebook](https://github.com/jaclx5/jaclx5.github.io/tree/master/notebooks/sequence_alignment) (more info at the [end of the post](#code)). 
 
 ## Dynamic Programming
 
@@ -193,3 +193,15 @@ Of course a few choices need to be made if we want to apply SA algorithms to gen
 check - for future posts:
 text_algorithms-crochemore-1994.pdf
 diff algorithms
+
+
+<a name="code"/>
+# Links and Software
+
+You can reproduce all the images from this post using the [companion notebook](https://github.com/jaclx5/jaclx5.github.io/blob/master/notebooks/sequence_alignment/alignment_tree/demo.ipynb).
+
+In the repository you will find the package [dalt](https://github.com/jaclx5/jaclx5.github.io/blob/master/notebooks/sequence_alignment/alignment_tree/dalt) which allows you to try your own algorithms and see the resulting trees.
+
+__It's important to note that the algorithms in this package ARE NOT efficient and ARE NOT intended to be used in any practical way. They were developed uniquely to illustrate the concepts in this post and to generate graphical representations of alignments for pedagogic purposes.__
+
+If you have questions or ideas feel free to share them in the comments box. 

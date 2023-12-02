@@ -226,15 +226,14 @@ class Alignment(AlignmentNode):
 
     def get_solution(self):
         """
-        Returns the first solution node starting in a width-first search to the tree.
+        Returns the best solution node starting in a width-first search to the tree.
         """
         if self.is_solution():
             return self
         else:
-            for child in self._children:
-                solution = child.get_solution()
+            solutions = list(filter(lambda _: _, [child.get_solution() for child in self._children]))
 
-                if solution:
-                    return solution
+            if solutions:
+                return max(solutions, key=lambda child: child.score)
 
         return None

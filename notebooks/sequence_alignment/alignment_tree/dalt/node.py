@@ -165,15 +165,13 @@ class Node:
                     count_leaf += 1
                 else:
                     if count_leaf:
-                        #self._rearrange_leaf_children(first_leaf, count_leaf, start_non_leaf_row, self._children[i]._row)
-                        pass
+                        self._rearrange_leaf_children(first_leaf, count_leaf, start_non_leaf_row, self._children[i]._row)
                         
                     # reinitialize
                     first_leaf, count_leaf, start_non_leaf_row = None, 0, self._children[i]._row
 
             if count_leaf and start_non_leaf_row:
-                #self._rearrange_leaf_children(first_leaf, count_leaf, start_non_leaf_row, None)
-                pass
+                self._rearrange_leaf_children(first_leaf, count_leaf, start_non_leaf_row, None)
             # -----------------------------------------
 
         # update the free row for the next node in this column.

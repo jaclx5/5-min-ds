@@ -25,7 +25,7 @@ class AlgorithmBruteForce(Algorithm):
                 # exits when no more expansion is possible
                 # in the brute force case, by definition, the best leaf
                 # at the end of the full expansion is the solution
-                solution = aln.get_best_leaf()
+                solution = aln.get_solution()
 
                 assert solution is not None, "No solution found check algorithm for correctness!"
 
