@@ -30,7 +30,7 @@ class AlgorithmGreedy(Algorithm):
                 break
     
         if expanded:
-            # colour green the latest node to be expanded
+            # colour green the latest expanded node
             expanded.color = COLOR_EXPANDED_BOX
     
         if solution:

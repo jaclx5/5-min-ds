@@ -14,7 +14,7 @@ class AlgorithmDynamicProgramming(Algorithm):
         scoreboard = {aln.coords: aln.score}
 
         solution = None
-        to_expand = aln
+        expanded = aln
     
         i = 0
         for i in range(max_steps):
@@ -31,30 +31,34 @@ class AlgorithmDynamicProgramming(Algorithm):
                 if score < scoreboard.get(coords, -math.inf):
                     # if the node is no better just "kill" it, i.e. mark it as expanded
                     # without actually expanding it
+                    to_expand.color = COLOR_KILLED_BOX
                     kill = True
-                    #an_expanded.set_tag(color="#000000")
                 else:
                     # if the node is the same or better, update the score and expand it
                     scoreboard[coords] = score
+                    expanded = to_expand
                     kill = False
                     
                 to_expand.expand(kill=kill)
 
-            if expanded is None:
+            else:
                 # by definition, the best leaf at the end of the expansion must be the solution
                 solution = aln.get_solution()
-                solution.color = COLOR_SOLUTION_BOX
                 break
 
-                
-            self._count_steps += 1
-
-        # colour green the latest node to be expanded
-        if an_expanded:
-            an_expanded.set_tag(color="#00ff00")
+        # colour green the latest expanded node
+        if expanded:
+            expanded.color = COLOR_EXPANDED_BOX
 
         # colour red the best unexplored node so far
-        if not self._solved:
-            an_start.get_best_non_expanded().set_tag(color="#ff0000")
+        if solution:
+            solution.color = COLOR_SOLUTION_BOX
+        else:
+            # colour red the best unexplored node so far
+            # which will be the green box in the a step
+            best_non_expanded = aln.get_best_node_to_expand()
 
-        self._an_start = an_start
+            if best_non_expanded:
+                best_non_expanded.color = COLOR_BEST_BOX
+
+        return solution is not None, i

@@ -157,11 +157,14 @@ class Alignment(AlignmentNode):
         
         self._expanded = False
 
-    def expand(self):
+    def expand(self, kill=False):
         if self._expanded:
             assert False, f"Trying to re-expand an already expanded node!\n----\n{self.text}\n-----"
 
         self._expanded = True
+
+        if kill:
+            return
 
         for op in (Operation.GAP_DOWN, Operation.MATCH, Operation.GAP_UP):
             child = self.child_alignment_factory(op)

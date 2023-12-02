@@ -8,9 +8,6 @@ from tqdm import tqdm
 from .alignment import Alignment
 from .algorithm import Algorithm
 
-COLOR_EXPANDED_BOX = "#00ff00"
-COLOR_SOLUTION_BOX = "#0000ff"
-
 BOX_WIDTH = 80
 BOX_HEIGHT = 35
 H_MARGIN = 2

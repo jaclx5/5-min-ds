@@ -5,6 +5,7 @@ from .alignment import Alignment
 COLOR_EXPANDED_BOX = "#00ff00"
 COLOR_SOLUTION_BOX = "#0000ff"
 COLOR_BEST_BOX = "#ff0000"
+COLOR_KILLED_BOX = "#000000"
 
 class Algorithm:
     """

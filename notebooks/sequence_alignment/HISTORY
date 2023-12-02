@@ -1,0 +1,16 @@
+# v2
+
+## simulation.py:
+    - Removed the useless color constants from the file.
+
+## Alignment.expand():
+    - Added the argument `kill` to mark an alignment as expanded without actually expanding it.
+
+## AlgorithmDynamicProgramming:
+    - Added the Dynamic programming algorithm to the code base.
+
+## demo.ipynb:
+     - Added the demo for the Dynamic Programming algorithm.
+
+
+# v1 - First version of the code.
