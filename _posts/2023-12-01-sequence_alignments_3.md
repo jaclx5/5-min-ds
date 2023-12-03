@@ -130,9 +130,9 @@ Note that the following two nodes correspond to two distinct partial alignments,
     <img src="/images/sequence_alignments/notation_3.png" height="100"/>
 </div>
 
-Both, however, consumed $$3$$ elements of sequence $$A$$ and $$2$$ elements of sequence $$A$$. Hence, we can say that both alignments belong to the $$S_{3, 2}$$ set.
+Both, however, consumed $$3$$ elements of sequence $$A$$ and $$2$$ elements of sequence $$A$$. Hence, we can say that both alignments belong to the $$Aln_{3, 2}$$ set.
 
-Generalizing, the set $$S_{i, j}$$ contains all alignments that consume $$i$$ elements from sequence $$A$$ and $$j$$ elements from sequence $$B$$.
+Generalizing, the set $$Aln_{i, j}$$ contains all alignments that consume $$i$$ elements from sequence $$A$$ and $$j$$ elements from sequence $$B$$.
 
 Finally, certain special nodes will be shown with particular colors. the __<span style="color:#ff0000;">red</span>__ node represents the best "non expanded" alignment observed so far, the __<span style="color:#00ff00;">green</span>__ node represents the expanded node that originated the current state, and the __<span style="color:#0000ff;">blue</span>__ one represents the solution whenever we find it. Note that the a solution requires that all elements of both sequences have been "consumed", thus, the partial alignments are only intermediate steps until a solution is reached.
 
@@ -148,11 +148,11 @@ Click on the left and right arrows, or in the bottom circles to navigate the ste
 
 {% include slideshow.html slideshow=page.greedy1 %}
 
-In the first step, the algorithm starts with an _empty_ alignment ($$\text{empty} \in S_{0,0}$$) with an score of 0 (zero), and "expands" it by applying the three possible operations:
+In the first step, the algorithm starts with an _empty_ alignment ($$\text{empty} \in Aln_{0,0}$$) with an score of 0 (zero), and "expands" it by applying the three possible operations:
 
-- an __INSERT__ in $$A_1$$, obtaining the partial alignment $$\text{(P/-)} \in S_{1,0}$$ with a score of -2.
-- a __MATCH__ between $$A_1$$ and $$B_1$$, obtaining $$\text{(P/P)} \in S_{1,1}$$ with a score of 3.
-- a __DELETION__ of $$A_i$$, obtaining $$\text{(-/P)} \in S_{0,1}$$ with a score of -2.
+- an __INSERT__ in $$A_1$$, obtaining the partial alignment $$\text{(P/-)} \in Aln_{1,0}$$ with a score of -2.
+- a __MATCH__ between $$A_1$$ and $$B_1$$, obtaining $$\text{(P/P)} \in Aln_{1,1}$$ with a score of 3.
+- a __DELETION__ of $$A_i$$, obtaining $$\text{(-/P)} \in Aln_{0,1}$$ with a score of -2.
 
 Next, it chooses the best node found so far (thus the __greedy__ in the algorithm's name) and repeats the same expansion process. The algorithm keeps "expanding" the best node, until it "exhausts" both sequences.
 
@@ -166,7 +166,7 @@ Take, for example, this other pair of sequences, <code class="python">ABC</code>
 
 {% include slideshow.html slideshow=page.greedy2 %}
 
-As we can see in this example, the greediness of the algorithm, and the fact that it stops as soon as it founds a possible solution, leads to the following sub-optimal alignment ($$(\text{ABC---/ABXABC}) \in S_{3,6}$$) as a solution:
+As we can see in this example, the greediness of the algorithm, and the fact that it stops as soon as it founds a possible solution, leads to the following sub-optimal alignment ($$(\text{ABC---/ABXABC}) \in Aln_{3,6}$$) as a solution:
 
 {% highlight markdown %}
     ABC---
