@@ -90,9 +90,9 @@ greedy2:
             caption: Which leads to a (premature) solution.
 ---
 
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-
 _In the [previous post](/sequence_alignments_2) I formally defined sequence alignments and described a way to compute a score for how "good" an alignment is. This score allows us to compare alignments between two sequences against each other which is key to help us find the best alignment of all, the optimal one. In this post I will start exploring algorithms to automatically find this optimal alignment between two sequences._
+
+<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
 > Check also the [companion notebook](https://github.com/jaclx5/jaclx5.github.io/tree/master/notebooks/sequence_alignment) (more info at the [end of the post](#code)). 
 
