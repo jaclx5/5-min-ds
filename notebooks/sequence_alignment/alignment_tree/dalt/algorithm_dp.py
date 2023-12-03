@@ -10,8 +10,8 @@ class AlgorithmDynamicProgramming(Algorithm):
         """
         aln.reset()
 
-        # keeps track of the best score for each position coordinates
-        scoreboard = {aln.coords: aln.score}
+        # keeps track of the best alignment for each position coordinates
+        scoreboard = {aln.coords: aln}
 
         solution = None
         expanded = aln
@@ -22,20 +22,20 @@ class AlgorithmDynamicProgramming(Algorithm):
             to_expand = aln.get_best_node_to_expand()
 
             if to_expand:
-                # get the (i, j) position of the node to expand and its score
-                coords = to_expand.coords
-                score = to_expand.score
+                # get the aligment with the best score in the same (i, j) coordinates as the next
+                # to expand alignment
+                best_aln_coords = scoreboard.get(to_expand.coords, None)
 
                 # compare the node to expand with the best already expanded
                 # for the same (i, j) position
-                if score < scoreboard.get(coords, -math.inf):
+                if best_aln_coords is not None and to_expand.score < best_aln_coords.score:
                     # if the node is no better just "kill" it, i.e. mark it as expanded
                     # without actually expanding it
                     to_expand.color = COLOR_KILLED_BOX
                     kill = True
                 else:
                     # if the node is the same or better, update the score and expand it
-                    scoreboard[coords] = score
+                    scoreboard[to_expand.coords] = to_expand
                     expanded = to_expand
                     kill = False
                     
@@ -45,6 +45,10 @@ class AlgorithmDynamicProgramming(Algorithm):
                 # by definition, the best leaf at the end of the expansion must be the solution
                 solution = aln.get_solution()
                 break
+
+        # colour yellow each best score in their position
+        for node in scoreboard.values():
+            node.color = "#FF00FF"
 
         # colour green the latest expanded node
         if expanded:

@@ -157,6 +157,16 @@ class Alignment(AlignmentNode):
         
         self._expanded = False
 
+    def compact(self, color=None):
+        count_children = self.count_children()
+
+        self.reset()
+        compact_child = Alignment(self._seq1, self._seq2, self._vmatch, self._vmismatch, self._vgap, self._ops)
+        compact_child.text = f"{count_children} children"
+
+        self.add_child(compact_child)
+        self.color = color
+
     def expand(self, kill=False):
         if self._expanded:
             assert False, f"Trying to re-expand an already expanded node!\n----\n{self.text}\n-----"
@@ -237,3 +247,14 @@ class Alignment(AlignmentNode):
                 return max(solutions, key=lambda child: child.score)
 
         return None
+
+    def get_by_coords(self, coords):
+        nodes = []
+
+        if self.coords == coords:
+            nodes.append(self)
+
+        for child in self._children:
+            nodes += child.get_by_coords(coords)
+
+        return nodes

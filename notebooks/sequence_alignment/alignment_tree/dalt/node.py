@@ -24,9 +24,8 @@ class Node:
 
     Private Attributes:
         _children (list[Node]): List of the children of the current node.
-        _col (int): Column to be assigned to the Node before drwaing the full tree.
-        _row (int): Row to be assigned to the Node before drwaing the full tree.
-
+        _col (int): Column to be assigned to the `Node` before drwaing the full tree.
+        _row (int): Row to be assigned to the `Node` before drwaing the full tree.
     """
     def __init__(self, text: str="", color: str=None):
         self._text = text
@@ -34,6 +33,7 @@ class Node:
 
         # by default a node is a root when it's created
         self._id = "*"
+
 
         self.reset()
 
@@ -102,7 +102,6 @@ class Node:
             start_non_leaf_row (int): Row coordinate of the starting NLN.
             end_non_leaf_row (int): Row coordinate of the end NLN.
         """
-        
         if start_non_leaf_row is None:
             start_non_leaf_row = end_non_leaf_row - count_leaf - 1
 
@@ -140,8 +139,8 @@ class Node:
                 child_col, child_row, child_box = child._arrange_all(level + 1, _next_free_row, self._row - mid_child_ndx)
 
                 # adjusts the own node row to align with the middle children
-                if mid_child_ndx == i:
-                    self._row = max(self._row, child_row)
+                #if mid_child_ndx == i:
+                #    self._row = max(self._row, child_row)
 
                 # update the tree box coordinates given the new children tree box.
                 self._box = TreeBoxCoords(
@@ -161,7 +160,7 @@ class Node:
 
             for i, child in enumerate(self._children):
                 if child.is_leaf():
-                    first_leaf = first_leaf if first_leaf else i
+                    first_leaf = i if first_leaf is None else first_leaf
                     count_leaf += 1
                 else:
                     if count_leaf:
@@ -172,6 +171,11 @@ class Node:
 
             if count_leaf and start_non_leaf_row:
                 self._rearrange_leaf_children(first_leaf, count_leaf, start_non_leaf_row, None)
+
+            # re-adjusts the own node row to align with the middle children (if changed)
+            for i, child in enumerate(self._children):
+                if mid_child_ndx == i:
+                    self._row = max(self._row, child._row)
             # -----------------------------------------
 
         # update the free row for the next node in this column.
@@ -261,3 +265,31 @@ class Node:
 
         # call the recursive function that will actually print
         self._draw_text_all()
+
+    def _count_children_all(self, root):
+        # not to count the node calling the function
+        count = 0 if root else 1
+
+        for child in self._children:
+            count += child._count_children_all(False)
+
+        return count
+
+    def count_children(self):
+        return self._count_children_all(True)
+
+    def _get_by_level_all(self, level):
+        nodes = []
+
+        if level == 0:
+            nodes.append(self)
+        else:
+            nodes = []
+
+            for child in self._children:
+                nodes += child._get_by_level_all(level - 1)
+
+        return nodes
+
+    def get_by_level(self, level):
+        return self._get_by_level_all(level - 1)

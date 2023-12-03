@@ -10,7 +10,7 @@ from .algorithm import Algorithm
 
 BOX_WIDTH = 80
 BOX_HEIGHT = 35
-H_MARGIN = 2
+H_MARGIN = 5
 V_MARGIN = 5
 
 @dataclass
@@ -101,12 +101,15 @@ class Simulation:
     def get_steps(self):
         return self._count_steps
 
+    def draw(self):
+        return self._aln.draw(BOX_WIDTH, BOX_HEIGHT, H_MARGIN, V_MARGIN)
+
     def frame(self, max_steps):
         # run at most `max_steps` from the algorihtm
         end, steps = self._algo.run(self._aln, max_steps=max_steps)
 
         # generates the image
-        img = self._aln.draw(BOX_WIDTH, BOX_HEIGHT, H_MARGIN, V_MARGIN)
+        img = self.draw()
 
         # get the coordinates of the starting node (must be called after draw)
         x, y = self._aln.get_xy()

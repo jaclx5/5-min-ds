@@ -1,3 +1,6 @@
+# to get coverage run:
+# $ coverage run test_dalt.py; coverage html
+
 import sys
 
 # adding parent folder to the system path
