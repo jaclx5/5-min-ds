@@ -11,39 +11,17 @@ _In the [previous post](/sequence_alignments_3) we start exploring sequence alig
 
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
-<style>
-    div#DNA {
-        font-family:monospace;
-        font-size: 20px;
-    }
-    .seqname {
-        color: black;
-    }
-    .A {
-        color: red;
-    }
-    .C {
-        color: green;
-    }
-    .G {
-        color: orange;
-    }
-    .T { 
-        color: blue;
-    }
-</style>
-
 ## Dynamic Programming
 
 Dynamic Programming was proposed in the 1950s by Richard Bellman (the choice of the name "Dynamic Programming" has a curious motivation as told by [Bellman himself in his autobiography](#Bellman1984)). It is a general optimization method applicable to a large class of problems that go well beyond sequence alignment. It is really worth further [explore](https://en.wikipedia.org/wiki/Dynamic_programming).
 
 The main intuition of the dynamic programming algorithm is that certain problems can be broken into a sequence of sub-problems, in a way that the optimal solution of the original problem can be found by recursively combining the optimal solution of each sub-problem, without the need to recompute them multiple times.
 
-How does dynamic programming applies to sequence aligments?
+How does dynamic programming applies to sequence alignments?
 
-Remember that when we apply the brute force algorithm, there are many ways different ways to align the $$i$$ first elements of sequence $$A$$ with the $$j$$ first elements of sequence $$B$$ (let's call them $$\{A_i/B_j\}_k$$), and the algorithm explores all of them until consuming all elements of both sequences.
+Remember that there are many different ways to align the $$i$$ first elements of sequence $$A$$ with the $$j$$ first elements of sequence $$B$$ (the sub alignments belonging to the set $$Aln_{i, j}$$). The brute force algorithm explores all of them to find the optimal overall sub alignment.
 
-The dynamic programming approach tels us that once we find the best (optimal) sub-alignment $$\{A_i/B_j\}_{optimal}$$ we can disregard all other $$\{A_i/B_j\}_{non-optimal}$$ sub-alignments, saving a lot of useless computation. This is because we assume that the optimal full alignment $$\{A/B\}_{optimal}$$ will only include optimal sub-alignments (which is kind of intutive).
+The dynamic programming approach tells us that once we find the optimal sub-alignment from the set $$Aln_{i,j}$$ (denoted by $$max(Aln_{i,j})$$) we can disregard all other sub-alignments from that set ($$Aln_{i,j} \setminus \{max(Aln_{i,j})\}$$), saving a lot of useless computation. This is because we assume that the overall optimal alignment will only include optimal sub-alignments (which is kind of intuitive).
 
 To make things more concrete lets look at the 6 first depth levels of the brute force alignment tree for sequences <code class="python">ABC</code> and <code class="python">ABXABC</code>:
 
@@ -51,16 +29,16 @@ To make things more concrete lets look at the 6 first depth levels of the brute 
     <a href="/images/sequence_alignments/brute_force_compact.png"><img src="/images/sequence_alignments/brute_force_compact.png" height="1400"/></a>
 </div>
 
-The coloured nodes (__<span style="color:#0072B2;">blue</span>__ and __<span style="color:#fd6a02;">yellow</span>__) represent all the 13 partial alignments that consumed exactly 2 elements from each sequence ($$\{A_2/B_2\}$$ in our notation), with the <span style="color:#0072B2;">blue</span> box representing the best one of those alignments. We consider it the __optimal sub-alignment of exactly 2 elements of each sequence__ ($$\{A_2/B_2\}_{optimal}$$).
+The coloured nodes (__<span style="color:#0072B2;">blue</span>__ and __<span style="color:#fd6a02;">yellow</span>__) represent all the 13 partial alignments that consumed exactly 2 elements from each sequence (all the sub alignments from the set $$Aln_{2,2}$$), with the <span style="color:#0072B2;">blue</span> box representing the best one of those alignments, i.e., the __optimal sub-alignment of exactly 2 elements of each sequence__, denoted $$max(Aln_{2,2})$$.
 
-According to the Dynamic Programming approach, the final optimal alignment ($$\{A/B\}_{optimal}$$) includes __only__ the best sub-alignments, hence there's no need to continue expanding the <span style="color:#fd6a02;">yellow</span> boxes: The optimal solution will not be there <a name="1eton"/>[[1]](#note1).
+According to the Dynamic Programming approach, the final optimal alignment includes __only__ the best sub-alignments, hence there's no need to continue expanding the <span style="color:#fd6a02;">yellow</span> boxes: The optimal solution will not be there <a name="1eton"/>[[1]](#note1).
 
 With this move alone we will save the expansion of $$12 \times 29 =  348$$ nodes, a full $$47\%$$ of all $$743$$ nodes explored by the brute force algorithm. Not Bad!
 
 
 ## The Dynamic Programming Algorithm
 
-Now that we know the basic concept begind Dynamic Programming, let's design a simple sequence alignment algorithm exploting these concepts and see how it actually performs comparing with our Brute Force approach.
+Now that we know the basic concept behind Dynamic Programming, let's design a simple sequence alignment algorithm exploting these concepts and see how it actually performs comparing with our Brute Force approach.
 
 The outline of out algorithm will be:
 {% highlight markdown %}
