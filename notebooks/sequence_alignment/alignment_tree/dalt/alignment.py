@@ -56,14 +56,12 @@ class AlignmentNode(Node):
 
     def _apply_ops(self):
         # "start" is the name by default for the empty alignment
-        mask, mseq1, mseq2 = "start", "", ""
+        mask, mseq1, mseq2 = "", "", ""
         
         self._score, i, j = 0, 0, 0
 
         if self._ops:
             # compute mask & score
-            mask = ""
-
             for op in self._ops:
                 match op:
                     case Operation.MATCH if self._seq1[i] == self._seq2[j]:
@@ -98,7 +96,10 @@ class AlignmentNode(Node):
             - The masked representation of the operations + the score
             - The second sequence with the operations applied.
         """
-        self.text = f"{mseq1}\n{mask} ({self.score})\n{mseq2}"
+        if mask:
+            self.text = f"{mseq1} - {i}\n{mask} ({self.score:2d})\n{mseq2} - {j}"
+        else:
+            self.text = f"------ 0\nstart ({self.score:2d})\n------ 0"
 
     def _get_score(self):
         return self._score
