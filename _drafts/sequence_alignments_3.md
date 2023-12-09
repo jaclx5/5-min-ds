@@ -116,7 +116,7 @@ An alignment algorithm is a set of mechanical rules applied, sequentially, step 
     <img src="/images/sequence_alignments/notation_1.png" height="250"/>
 </div>
 
-Each tree is a snapshot of a given step of the algorithm. The nodes in the tree correspond to partial alignments being evaluated by the algorithm. Each tree depicts all the nodes (partial alignments) evaluated up to that step, either expandd (with children) or not.
+Each tree is a snapshot of a given step of the algorithm. The nodes in the tree correspond to partial alignments being evaluated by the algorithm. Each tree depicts all the nodes (partial alignments) evaluated up to that step, either expand (with children) or not.
 
 Each node in the tree contains the following extra information:
 
