@@ -7,11 +7,18 @@ layout: default
 
   <div class="entry">
     {{ content }}
+
+    <h3 id="contact-me">Contact me</h3>
+    <p>
+      Feel free to reach out at <a href="mailto:cincominutosdatascience@gmail.com">cincominutosdatascience@gmail.com</a>. Whether you have questions, suggestions, or just want to share your own experiences, I'm happy to connect.<br/>
+      Looking forward to hearing from you!
+    </p>
   </div>
+
+
 
   <div class="date">
     Posted on {{ page.date | date: "%B %e, %Y" }}
   </div>
 
-  {% include disqus.html %}
 </article>
