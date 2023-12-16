@@ -110,7 +110,7 @@ Now, our next challenge will be to __design an algorithm that finds the optimal 
 
 Before moving on, let's add some notation to help us describe the algorithms to be developed.
 
-An alignment algorithm is a set of mechanical rules applied, sequentially, step by step. I will illustrate the algorithms in this post with ternary trees like the one bellow:
+An alignment algorithm, as per algorithm definition, is a set of mechanical rules applied, sequentially, step by step. I will illustrate the algorithms in this post with ternary trees like the one bellow:
 
 <div align="center">
     <img src="/images/sequence_alignments/notation_1.png" height="250"/>
@@ -181,7 +181,7 @@ As we can see in this example, the greediness of the algorithm, and the fact tha
 
 $$(2 \times 3) + (1 \times -1) + (3 \times -2) = -1$$
 
-How do I know this is not the optimal alignment? Because, with a little manual effort, I can find an alignment with a higher score:
+How do I know this is not the optimal alignment? Because, with a little manual effort, I can find the alignment $$(\text{AB---C/ABXABC}) \in Aln_{3,6}$$ which has a higher score:
 
 {% highlight markdown %}
     AB---C
