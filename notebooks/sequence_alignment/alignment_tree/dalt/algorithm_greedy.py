@@ -14,20 +14,23 @@ class AlgorithmGreedy(Algorithm):
         solution = None
         expanded = aln
 
-        i = 0
-        for i in range(max_steps):
-            # get the __best__ non expanded node so far
-            expanded = aln.get_best_node_to_expand()
-            
-            if expanded:
-                expanded.expand()
-
-            # check if a solution was found (GREEDY)
-            solution = aln.get_solution()
-
-            if solution:
-                # if a solution was found it's done!
-                break
+        if max_steps == 0:
+            i = 0
+        else:
+            for i in range(max_steps):
+                # get the __best__ non expanded node so far
+                expanded = aln.get_best_node_to_expand()
+                
+                if expanded:
+                    expanded.expand()
+    
+                # check if a solution was found (GREEDY)
+                solution = aln.get_solution()
+    
+                if solution:
+                    # if a solution was found it's done!
+                    break
+            i += 1
     
         if expanded:
             # colour green the latest expanded node

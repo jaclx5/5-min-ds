@@ -13,24 +13,28 @@ class AlgorithmBruteForce(Algorithm):
         solution = None
         expanded = aln
 
-        i = 0
-        for i in range(max_steps):
-            # get the first node to expand
-            expanded = aln.get_node_to_expand()
-
-            if expanded:
-                expanded.expand()
-
-            else:
-                # exits when no more expansion is possible
-                # in the brute force case, by definition, the best leaf
-                # at the end of the full expansion is the solution
-                solution = aln.get_solution()
-
-                assert solution is not None, "No solution found check algorithm for correctness!"
-
-                solution.color = COLOR_SOLUTION_BOX
-                break
+        if max_steps == 0:
+            i = 0
+        else:
+            for i in range(max_steps):
+                # get the first node to expand
+                expanded = aln.get_node_to_expand()
+    
+                if expanded:
+                    expanded.expand()
+    
+                else:
+                    # exits when no more expansion is possible
+                    # in the brute force case, by definition, the best leaf
+                    # at the end of the full expansion is the solution
+                    solution = aln.get_solution()
+    
+                    assert solution is not None, "No solution found check algorithm for correctness!"
+    
+                    solution.color = COLOR_SOLUTION_BOX
+                    break
+                    
+            i += 1
                 
         # colour green the latest expanded node
         if expanded:

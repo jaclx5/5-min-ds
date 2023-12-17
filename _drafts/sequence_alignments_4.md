@@ -3,6 +3,18 @@ title: How to Compare Text with Sequence Alignment Algorithms - Dynamic Programm
 layout: post
 author: jaclx5
 
+dp1:
+    slides:
+        - slide:
+            image: /images/sequence_alignments/dp/step_08.png
+            caption: [TBD]
+        - slide:
+            image: /images/sequence_alignments/dp/step_09.png
+            caption: [TBD]
+        - slide:
+            image: /images/sequence_alignments/dp/step_10.png
+            caption: [TBD]
+
 ---
 
 _In the [previous post](/sequence_alignments_3) we start exploring sequence alignment algorithms with the greedy and brute force approaches... now it's time for dynamic programming._
@@ -67,14 +79,16 @@ The outline of out algorithm will be:
 4. Go back to step 1 until all nodes have been expanded or discarded.
 {% endhighlight %}
 
+**Add the $$Aln_{i, j}$$ notation to the explanation bellow**
+
 The sequence of images bellow illustrates some steps pf this algorithm applied to the previous sequences: <code class="python">ABC</code> and <code class="python">ABXABC</code>, respectively our $$A$$ and $$B$$ sequences.
 
 As in the previous post, each image is a step of the algorithm and the boxes (or nodes) represent partial alignments observed at that step. The __<span style="color:#ff0000;">red</span>__ box represents the best "non expanded" alignment observed so far, the __<span style="color:#00ff00;">green</span>__ box represents the expanded node that originated the current state, and the __<span style="color:#0000ff;">blue</span>__ one will represent the solution whenever we find it. But now we have two new colors: __<span style="color:#000000;">black</span>__ represents all the nodes that we will not care to expand and  __<span style="color:#ff00ff;">pink</span>__ represents the best alignment that consumed the respective letters.
 
-********* ADD THE MOVIE HERE (change the code to show only from min_steps to max_steps *************************
+{% include slideshow.html slideshow=page.dp1 %}
 
 
-In this example we show only the steps 8, 9 and 10. Until step 8 the Dynamic Programming algorithm works exaclty as the Greedy algorithm, but in the next step we will observe the big difference: The alignment (ABC-/AB-X) is the best non expanded alignment so far with score == 2. However, a previous expanded alignment (ABC/ABX) have consumed the same letters but with a higher score == 5. Hence, there's no point in expanding the (ABC-/AB-X) alignment. We discard it (it's marked in black in step 9) and proceed with the algorithm saving the computation required by the whole branch expansion.
+In this example we show only the steps 8, 9 and 10. Until step 8 the Dynamic Programming algorithm works exaclty as the Greedy algorithm, but in the next step we will observe the big difference: The alignment (ABC-/AB-X) is the best non expanded alignment so far with score == 2. However, a previous expanded alignment (ABC/ABX) have consumed the same letters but with a higher score == 5. Hence, there's no point in expanding the (ABC-/AB-X) alignment. We discard it (it's marked in black in step 9) and proceed with the algorithm saving the computation required by the whole branch expansion. The same logic is applied in all other nodes: "Ignore any node if it is not to best alignment of the respective set"
 
 As you can see in the image bellow, the full dynamic programming tree for this alignment takes $$73$$ steps a $$10\times$$ improvement over the $$743$$ steps of the Brute Force algorithm to find the same (hopefully) optimal solution:
 

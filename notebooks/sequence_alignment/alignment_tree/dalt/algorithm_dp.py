@@ -15,36 +15,40 @@ class AlgorithmDynamicProgramming(Algorithm):
 
         solution = None
         expanded = aln
+
+        if max_steps == 0:
+            i = 0
+        else:    
+            for i in range(max_steps):
+                # get the best non expanded node so far
+                to_expand = aln.get_best_node_to_expand()
     
-        i = 0
-        for i in range(max_steps):
-            # get the best non expanded node so far
-            to_expand = aln.get_best_node_to_expand()
-
-            if to_expand:
-                # get the aligment with the best score in the same (i, j) coordinates as the next
-                # to expand alignment
-                best_aln_coords = scoreboard.get(to_expand.coords, None)
-
-                # compare the node to expand with the best already expanded
-                # for the same (i, j) position
-                if best_aln_coords is not None and to_expand.score < best_aln_coords.score:
-                    # if the node is no better just "kill" it, i.e. mark it as expanded
-                    # without actually expanding it
-                    to_expand.color = COLOR_KILLED_BOX
-                    kill = True
+                if to_expand:
+                    # get the aligment with the best score in the same (i, j) coordinates as the next
+                    # to expand alignment
+                    best_aln_coords = scoreboard.get(to_expand.coords, None)
+    
+                    # compare the node to expand with the best already expanded
+                    # for the same (i, j) position
+                    if best_aln_coords is not None and to_expand.score < best_aln_coords.score:
+                        # if the node is no better just "kill" it, i.e. mark it as expanded
+                        # without actually expanding it
+                        to_expand.color = COLOR_KILLED_BOX
+                        kill = True
+                    else:
+                        # if the node is the same or better, update the score and expand it
+                        scoreboard[to_expand.coords] = to_expand
+                        expanded = to_expand
+                        kill = False
+                        
+                    to_expand.expand(kill=kill)
+    
                 else:
-                    # if the node is the same or better, update the score and expand it
-                    scoreboard[to_expand.coords] = to_expand
-                    expanded = to_expand
-                    kill = False
-                    
-                to_expand.expand(kill=kill)
+                    # by definition, the best leaf at the end of the expansion must be the solution
+                    solution = aln.get_solution()
+                    break
 
-            else:
-                # by definition, the best leaf at the end of the expansion must be the solution
-                solution = aln.get_solution()
-                break
+            i += 1
 
         # colour yellow each best score in their position
         for node in scoreboard.values():

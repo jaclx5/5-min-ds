@@ -77,3 +77,5 @@ s.frame(max_steps=20).save("x.png")
 s.movie(max_steps=10).save(".")
 
 print(s.get_steps())
+
+s.movie(max_steps=10, start_step=1).save(".", image_name="other_step_$STEP$.png")

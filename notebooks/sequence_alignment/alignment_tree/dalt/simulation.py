@@ -81,9 +81,9 @@ class Movie:
     def save(self, image_path, image_name="step_$STEP$.png"):
         self.center_frames()
 
-        for (i, frame) in enumerate(self._frames):
+        for frame in self._frames:
             # save the resized image
-            fname = os.path.join(image_path, image_name.replace("$STEP$", f"{i:02d}"))
+            fname = os.path.join(image_path, image_name.replace("$STEP$", f"{frame.steps:02d}"))
 
             frame.save(fname)
 
@@ -116,11 +116,11 @@ class Simulation:
 
         return MovieFrame(img, x, y, end, steps)
         
-    def movie(self, max_steps, progress=False):
+    def movie(self, max_steps, start_step=0, progress=False):
         movie = Movie()
         
         # generate the individual steps of the algorithm
-        for i in tqdm(range(max_steps), disable=not progress):
+        for i in tqdm(range(start_step, max_steps), disable=not progress):
 
             # run the algorithm up to the i-th step and keep the frame
             frame = self.frame(max_steps=i)
