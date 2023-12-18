@@ -38,6 +38,7 @@ class AlgorithmDynamicProgramming(Algorithm):
                     else:
                         # if the node is the same or better, update the score and expand it
                         scoreboard[to_expand.coords] = to_expand
+                        to_expand.color = COLOR_BEST_FROM_SET_BOX
                         expanded = to_expand
                         kill = False
                         
@@ -50,16 +51,16 @@ class AlgorithmDynamicProgramming(Algorithm):
 
             i += 1
 
-        # colour yellow each best score in their position
-        for node in scoreboard.values():
-            node.color = "#FF00FF"
+        # colour pink each best score in their position
+        #for node in scoreboard.values():
+        #    node.color = COLOR_BEST_FROM_SET_BOX
 
         # colour green the latest expanded node
         if expanded:
             expanded.color = COLOR_EXPANDED_BOX
 
-        # colour red the best unexplored node so far
         if solution:
+            # colour blue the solution
             solution.color = COLOR_SOLUTION_BOX
         else:
             # colour red the best unexplored node so far
