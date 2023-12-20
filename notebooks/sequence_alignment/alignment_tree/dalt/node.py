@@ -24,8 +24,8 @@ class Node:
 
     Private Attributes:
         _children (list[Node]): List of the children of the current node.
-        _col (int): Column to be assigned to the `Node` before drwaing the full tree.
-        _row (int): Row to be assigned to the `Node` before drwaing the full tree.
+        _col (int): Column to be assigned to the `Node` before drawing the full tree.
+        _row (int): Row to be assigned to the `Node` before drawing the full tree.
     """
     def __init__(self, text: str="", color: str=None):
         self._text = text

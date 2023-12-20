@@ -1,3 +1,31 @@
+# v3
+
+## algorithm.py
+    - Added more colors ("Killed" and "Best from set") to the list of available constants.
+
+## algorithm_*.py
+    - BUG: The number of the frame being returned for all frames was decreased by 1 making the
+           frame '0' to appear twice.
+
+## Class `AlignmentNode`
+    - Added the property `coords` that returns a tuple with the number of letters consumed in each
+      of the sequences in the respective node.
+
+## Class `Alignment`
+    - Added the method `compact` that replaces all sub trees bellow a given level by a single node
+      counting the number of children in the sub-tree.
+
+    - Implemented the `ignore` parameter in the method `expand`. The nodes are marked as expanded
+      but do not generate the respective chidren.
+
+    - Changed the method `get_solution` to return the best solution if many are available.
+
+    - Added the method `get_by_coords` to return all nodes with the given coords.
+
+## Class `Simulation`:
+    - Added an extra parameter `start_step` to the method `movie`. Now it generates only the frames
+      from `start_step` to `max_step` instead of all frames from 0 to `max_steps`.
+
 # v2
 
 ## simulation.py:

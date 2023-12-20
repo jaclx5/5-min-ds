@@ -31,18 +31,17 @@ class AlgorithmDynamicProgramming(Algorithm):
                     # compare the node to expand with the best already expanded
                     # for the same (i, j) position
                     if best_aln_coords is not None and to_expand.score < best_aln_coords.score:
-                        # if the node is no better just "kill" it, i.e. mark it as expanded
+                        # if the node is no better just "ignore" it, i.e. mark it as expanded
                         # without actually expanding it
-                        to_expand.color = COLOR_KILLED_BOX
-                        kill = True
+                        to_expand.color = COLOR_IGNORED_BOX
+                        ignore = True
                     else:
                         # if the node is the same or better, update the score and expand it
                         scoreboard[to_expand.coords] = to_expand
-                        to_expand.color = COLOR_BEST_FROM_SET_BOX
                         expanded = to_expand
-                        kill = False
+                        ignore = False
                         
-                    to_expand.expand(kill=kill)
+                    to_expand.expand(ignore=ignore)
     
                 else:
                     # by definition, the best leaf at the end of the expansion must be the solution
@@ -51,16 +50,16 @@ class AlgorithmDynamicProgramming(Algorithm):
 
             i += 1
 
-        # colour pink each best score in their position
-        #for node in scoreboard.values():
-        #    node.color = COLOR_BEST_FROM_SET_BOX
+        # colour yellow each best score in their position
+        for node in scoreboard.values():
+            node.color = "#FF00FF"
 
         # colour green the latest expanded node
         if expanded:
             expanded.color = COLOR_EXPANDED_BOX
 
+        # colour red the best unexplored node so far
         if solution:
-            # colour blue the solution
             solution.color = COLOR_SOLUTION_BOX
         else:
             # colour red the best unexplored node so far

@@ -168,13 +168,13 @@ class Alignment(AlignmentNode):
         self.add_child(compact_child)
         self.color = color
 
-    def expand(self, kill=False):
+    def expand(self, ignore=False):
         if self._expanded:
             assert False, f"Trying to re-expand an already expanded node!\n----\n{self.text}\n-----"
 
         self._expanded = True
 
-        if kill:
+        if ignore:
             return
 
         for op in (Operation.GAP_DOWN, Operation.MATCH, Operation.GAP_UP):

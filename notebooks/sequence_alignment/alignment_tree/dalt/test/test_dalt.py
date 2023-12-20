@@ -58,7 +58,7 @@ best_non_expanded = aln.get_best_node_to_expand()
 assert best_non_expanded.id == "*.2.1"
 
 # mark it as "expanded" without actually expanding it
-best_non_expanded.expand(kill=True)
+best_non_expanded.expand(ignore=True)
 
 #
 # First test
