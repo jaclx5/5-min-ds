@@ -144,7 +144,7 @@ Both of them, although distinct, consumed $$3$$ letters from sequence $$A$$ and 
 
 ### Node's Color Code
 
-Finally, certain special nodes will be depicted with colored boxes. The __<span style="color:#ff0000;">red</span>__ node represents the best "non expanded" alignment evaluated so far, the __<span style="color:#00ff00;">green</span>__ node represents the expanded node that originated the current state, and the __<span style="color:#0000ff;">blue</span>__ one represents the solution alignment whenever we find it. Note that the a solution requires that all letters of both sequences have been "consumed", thus, all partial alignments are only intermediate steps of an algorithm until a solution is reached.
+Finally, certain special nodes will be depicted with colored nodes. The __<span style="color:#ff0000;">red</span>__ node represents the best "non expanded" alignment evaluated so far, the __<span style="color:#00ff00;">green</span>__ node represents the expanded node that originated the current state, and the __<span style="color:#0000ff;">blue</span>__ one represents the solution alignment whenever we find it. Note that the a solution requires that all letters of both sequences have been "consumed", thus, all partial alignments are only intermediate steps of an algorithm until a solution is reached.
 
 Now, the algorithms.
 
@@ -152,7 +152,7 @@ Now, the algorithms.
 
 Our first attempt to build an alignment algorithm will be a straightforward, although _naïve_, way to search for the optimal alignment. This algorithm systematically expands all possible alignment operations in each step of the way, "greedily" choosing the next search direction according to the best score found so far.
 
-The images bellow illustrate this __greedy algorithm__ applied to our [already familiar sequences](/sequence_alignments_2#external1):
+The images bellow illustrate this __Greedy Algorithm__ applied to our [already familiar sequences](/sequence_alignments_2#external1):
 
 {% highlight markdown %}
 A = POINTER
@@ -175,7 +175,7 @@ As it progresses, the algorithm recursively builds a ternary tree that contains 
 
 Note that, due to the accumulation of gaps and mismatches, in some steps (e.g. steps 4 and 7), the next best alignment to be expanded (red box) isn't always a child of previously expanded one (green box). In these cases the algorithm "backtracks" to expand other branches of the tree.
 
-Although the algorithm seems to be, at a first glance, pretty effective, it has a major flaw. __As it usually occurs with greedy algorithms, it often fails to find the optimal alignment__.
+Although the algorithm seems to be, at a first glance, pretty effective, it has a major flaw. __As it usually occurs with Greedy algorithms, it often fails to find the optimal alignment__.
 
 Take, for example, this other pair of sequences, <code class="python">ABC</code> and <code class="python">ABXABC</code>:
 
@@ -201,19 +201,19 @@ How do I know this is not the optimal alignment? Because, with a little manual e
 
 $$(3 \times 3) + (0 \times -1) + (3 \times -2) = 3$$
 
-Of course that, for all but the shortest alignments, it is impossible to manually verify if a specific solution is the optimal one or not. The point I am making here is that, with this simple counter-example, I can prove that the greedy approach some times fails.
+Of course that, for all but the shortest alignments, it is impossible to manually verify if a specific solution is the optimal one or not. The point I am making here is that, with this simple counter-example, I can prove that the Greedy approach some times fails.
 
 At least in the sequence alignment world, greed doesn't pay of.
 
 ## Brute Force - Almost There
 
-One way to overcame the limitations of the greedy algorithm is to continue exploring the alignment space, even after having found a first solution, by backtracking and exploring all remaining possibilities. This systematic search over all possibilities is commonly called a "__Brute Force__" strategy, i.e., to test all possibilities and make sure that the optimal alignment is never missed.
+One way to overcame the limitations of the Greedy algorithm is to continue exploring the alignment space, even after having found a first solution, by backtracking and exploring all remaining possibilities. This systematic search over all possibilities is commonly called a "__Brute Force__" strategy, i.e., to test all possibilities and make sure that the optimal alignment is never missed.
 
-Mechanically, both algorithms are pretty similar, the main difference between the greedy and the brute force algorithms is the stopping condition. While the former stops at the first solution, the latter keeps searching until all solutions have been tested.
+Mechanically, both algorithms are pretty similar, the main difference between the Greedy and the Brute Force algorithms is the stopping condition. While the former stops at the first solution, the latter keeps searching until all solutions have been tested.
 
-Of course, due to the huge number of possible alignments, the brute force approach is completely impractical for all but the smallest sequences.
+Of course, due to the huge number of possible alignments, the Brute Force approach is completely impractical for all but the smallest sequences.
 
-The bravest readers may want to take a look, at their own risk, at the complete brute force expansion of the alignment between <code class="python">ABC</code> and <code class="python">ABXABC</code>:
+The bravest readers may want to take a look, at their own risk, at the complete Brute Force expansion of the alignment between <code class="python">ABC</code> and <code class="python">ABXABC</code>:
 
 <div align="center">
     <a href="/images/sequence_alignments/full_brute_force.png"><img src="/images/sequence_alignments/full_brute_force.png" height="500"/></a>
@@ -246,5 +246,3 @@ You can reproduce all the images from this post using the [companion notebook](h
 In the repository you will find the package [dalt](https://github.com/jaclx5/jaclx5.github.io/blob/master/notebooks/sequence_alignment/alignment_tree/dalt) which allows you to try your own algorithms and see the resulting trees.
 
 __It is important to note that the algorithms in this package ARE NOT efficient and ARE NOT intended to be used in any practical way. They were developed uniquely to illustrate the concepts in this post and to generate graphical representations of alignments for pedagogic purposes.__
-
-If you have questions or ideas feel free to share them in the comments box. 
