@@ -69,7 +69,7 @@ With this tree pruning move, allowed by the Dynamic Programming, we will avoid t
 
 Now that we know the concepts behind Dynamic Programming, let's design a simple sequence alignment algorithm exploiting them and see how it actually performs comparing with our Brute Force approach.
 
-Here is the outline of our algorithm:
+Here is the outline of the algorithm:
 
 1. Start with a tree containing only the initial partial alignment, i.e., the on containing the unaligned sequences: $$start \in Aln_{0,0}$$.
 
@@ -126,10 +126,9 @@ $$(AB---C/ABCABC) \in Aln_{3,6}, score=3$$
 
 Also note that, as we mentioned before, not all optimal partial alignments are part of the optimal alignment "path" (e.g. $$(ABC/ABX) \in Aln_{3,3}, score=5$$ is in a different branch of the tree that does not lead to the optimal alignment).
 
-# Next Steps
+# Next Steps: Needleman-Wunsch
 
-Needleman-Wunsch
-
+The algorithm presented above, although simple to understand, is neither elegant or efficient. Hopefully, it provides a pedagogical understaning of the Dynamic Programming applied to sequence alignment, that will make much easier to understand the real deal in terms of Dynamic Programming Sequence Alignment: the Needleman-Wunsch algorithm in the next post.
 
 
 # Notes
@@ -150,7 +149,3 @@ Needleman-Wunsch
 # The Code
 
 You can reproduce all the images from this post using the [companion notebook](https://github.com/jaclx5/jaclx5.github.io/blob/master/notebooks/sequence_alignment/alignment_tree/demo.ipynb).
-
-In the repository you will find the package [dalt](https://github.com/jaclx5/jaclx5.github.io/blob/master/notebooks/sequence_alignment/alignment_tree/dalt) which allows you to try your own algorithms and see the resulting trees.
-
-__It's important to note that the algorithms in this package ARE NOT efficient and ARE NOT intended to be used in any practical way. They were developed uniquely to illustrate the concepts in this post and to generate graphical representations of alignments for pedagogic purposes.__
