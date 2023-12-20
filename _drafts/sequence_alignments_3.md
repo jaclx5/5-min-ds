@@ -106,23 +106,31 @@ If you have been following the previous posts of this series you have learned qu
 
 Now, our next challenge will be to __design an algorithm that finds the optimal alignment between any two given sequences__.
 
-## A Little Bit of Notation 
+## A Little Bit of Notation
 
-Before moving on, let's add some notation to help us describe the algorithms to be developed.
+### The Tree Representation
 
-An alignment algorithm, as per algorithm definition, is a set of mechanical rules applied, sequentially, step by step. I will illustrate the algorithms in this post with ternary trees like the one bellow:
+Before moving on, let's introduce some notation to help us describe the algorithms to be developed.
+
+In this and the following posts I will use ternary trees, like the one bellow, to illustrate alignment algorithms:
 
 <div align="center">
     <img src="/images/sequence_alignments/notation_1.png" height="250"/>
 </div>
 
-Each tree is a snapshot of a given step of the algorithm. The nodes in the tree correspond to partial alignments being evaluated by the algorithm. Each tree depicts all the nodes (partial alignments) evaluated up to that step, either expand (with children) or not.
+The root of the tree represents the empty alignment, before applying any operation to the sequences being aligned. The children nodes represent the partial alignments obtained after applying the alignment operations GAP (top and bottom nodes), MATCH or MISMATCH (center node) to any parent node. All nodes with children are said to have been "__expanded__".
+
+An alignment algorithm is a set of mechanical instructions to evaluate the observed nodes and to choose the next best node to be expanded. Those instructions are executed until a solution is found.
+
+Each tree is a snapshot of a given state of the algorithm after the execution of several instructions. The tree above, for example, represent the state of an algorithm after the expansion of three nodes: $$start$$, $$P/P$$ and $$PO/PU$$.
 
 Each node in the tree contains the following extra information:
 
 <div align="center">
     <img src="/images/sequence_alignments/notation_2.png" height="250"/>
 </div>
+
+### The $$Aln_{i, j}$$ Set Concept
 
 We define $$Aln_{i, j}$$ as the set of all alignments that consumed $$i$$ letters from sequence $$A$$ and $$j$$ letters from sequence $$B$$.
 
@@ -133,6 +141,8 @@ Note, as an example, the two following nodes, corresponding to two distinct part
 </div>
 
 Both of them, although distinct, consumed $$3$$ letters from sequence $$A$$ and $$2$$ letters from sequence $$B$$. Hence, we can say that both alignments belong to the $$Aln_{3, 2}$$ set.
+
+### Node's Color Code
 
 Finally, certain special nodes will be depicted with colored boxes. The __<span style="color:#ff0000;">red</span>__ node represents the best "non expanded" alignment evaluated so far, the __<span style="color:#00ff00;">green</span>__ node represents the expanded node that originated the current state, and the __<span style="color:#0000ff;">blue</span>__ one represents the solution alignment whenever we find it. Note that the a solution requires that all letters of both sequences have been "consumed", thus, all partial alignments are only intermediate steps of an algorithm until a solution is reached.
 
