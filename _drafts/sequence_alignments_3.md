@@ -90,7 +90,7 @@ greedy2:
             caption: Which leads to a (premature) solution.
 ---
 
-_In this post, with the help of the formal definitions and the scoring scheme presented in the [previous post](/sequence_alignments_2), I will start exploring some algorithms to automatically find this optimal alignment between two sequences._
+_Now that we know what an __optimal alignment__ is, the next step will be to learn how to find it. In this post we will start exploring the algorithms to find the optimal alignment between two sequences._
 
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
@@ -98,59 +98,64 @@ _In this post, with the help of the formal definitions and the scoring scheme pr
 
 # Alignment Algorithms
 
-If you have been following the previous posts of this series you have learned quite a bit about alignments. Let's recap a few things we learned so far:
+If you have been following the previous posts in this series you have learned quite a bit about alignments. Let's recap a few things we learned so far:
 - An alignment between two sequences $$A$$ and $$B$$ is a sequence of operations over $$A$$ that turns it into $$B$$;
 - There are a huge number of possible distinct alignments between $$A$$ and $$B$$;
-- It is possible to compute a __score__ of how "good" each of those alignments is;
-- And, finally, we call the alignment with the highest score the __optimal alignment__.
+- It is possible to compute a __score__ of how "good" each of those individual alignments is;
+- And, finally, the alignment with the highest score is called the __optimal alignment__.
 
 Now, our next challenge will be to __design an algorithm that finds the optimal alignment between any two given sequences__.
 
 ## A Little Bit of Notation
 
+Let's start by introducing some notation to help us describe the algorithms to be developed.
+
 ### The Tree Representation
 
-Before moving on, let's introduce some notation to help us describe the algorithms to be developed.
-
-In this and the following posts I will use ternary trees, like the one bellow, to illustrate alignment algorithms:
+In this and in the following posts I will use ternary trees, like the one bellow, to illustrate the inner workings of the alignment algorithms:
 
 <div align="center">
     <img src="/images/sequence_alignments/notation_1.png" height="250"/>
 </div>
 
-The root of the tree represents the empty alignment, before applying any operation to the sequences being aligned. The children nodes represent the partial alignments obtained after applying the alignment operations GAP (top and bottom nodes), MATCH or MISMATCH (center node) to any parent node. All nodes with children are said to have been "__expanded__".
+The root node of the tree represents the empty alignment, before applying any operation to the sequences being aligned. Each one of its child nodes represents the partial alignments obtained after applying one of the three alignment operations:
+- A __GAP__ inserted on sequence __B__, top child node.
+- A __MATCH / MISMATCH__ (depending on the letters being matched), middle child node.
+- A __GAP__ inserted on sequence __A__, bottom child node.
 
-An alignment algorithm is a set of mechanical instructions to evaluate the observed nodes and to choose the next best node to be expanded. Those instructions are executed until a solution is found.
+All nodes shown with its children in the tree representation are said to be "__expanded__".
 
-Each tree is a snapshot of a given state of the algorithm after the execution of several instructions. The tree above, for example, represent the state of an algorithm after the expansion of three nodes: $$start$$, $$P/P$$ and $$PO/PU$$.
+An alignment algorithm is a set of mechanical instructions to evaluate the observed nodes and to choose the next node to be expanded. Those instructions are repeated until a solution is found.
 
-Each node in the tree contains the following extra information:
+Each tree representation is a snapshot of a given state of the algorithm, after the execution of several instructions. The tree above, for example, represents the state of the algorithm after the expansion of three nodes: $$start$$, $$P/P$$ and $$PO/PU$$. At this stage there are 10 observed nodes.
+
+Each node in the tree is represented with the following extra information:
 
 <div align="center">
     <img src="/images/sequence_alignments/notation_2.png" height="250"/>
 </div>
 
+### Node's Color Code
+
+Certain special nodes are depicted with colored nodes. In al trees the __<span style="color:#ff0000;">red</span>__ node represents the best "non expanded" alignment evaluated so far, the __<span style="color:#00ff00;">green</span>__ node represents the expanded node that originated the current state, and the __<span style="color:#0000ff;">blue</span>__ node represents the solution alignment whenever we find it. Note that any solution requires that all letters from both sequences have been "consumed". All internal nodes of the tree are partial alignments, i.e., intermediate steps of the algorithm until a solution is reached.
+
 ### The $$Aln_{i, j}$$ Set Concept
 
 We define $$Aln_{i, j}$$ as the set of all alignments that consumed $$i$$ letters from sequence $$A$$ and $$j$$ letters from sequence $$B$$.
 
-Note, as an example, the two following nodes, corresponding to two distinct partial alignments, with distinct sequences of operations:
+The two following nodes correspond to two distinct partial alignments resulting from two distinct sequences of operations:
 
 <div align="center">
     <img src="/images/sequence_alignments/notation_3.png" height="100"/>
 </div>
 
-Both of them, although distinct, consumed $$3$$ letters from sequence $$A$$ and $$2$$ letters from sequence $$B$$. Hence, we can say that both alignments belong to the $$Aln_{3, 2}$$ set.
-
-### Node's Color Code
-
-Finally, certain special nodes will be depicted with colored nodes. The __<span style="color:#ff0000;">red</span>__ node represents the best "non expanded" alignment evaluated so far, the __<span style="color:#00ff00;">green</span>__ node represents the expanded node that originated the current state, and the __<span style="color:#0000ff;">blue</span>__ one represents the solution alignment whenever we find it. Note that the a solution requires that all letters of both sequences have been "consumed", thus, all partial alignments are only intermediate steps of an algorithm until a solution is reached.
+Although distinct, both of them consumed $$3$$ letters from sequence $$A$$, and $$2$$ letters from sequence $$B$$. Hence, we can say that both alignments belong to the $$Aln_{3, 2}$$ set.
 
 Now, the algorithms.
 
 ## Greedy Approach - A False Start
 
-Our first attempt to build an alignment algorithm will be a straightforward, although _naïve_, way to search for the optimal alignment. This algorithm systematically expands all possible alignment operations in each step of the way, "greedily" choosing the next search direction according to the best score found so far.
+Our first attempt to build an alignment algorithm will follow a straightforward, although _naïve_, greedy strategy. In each step our algorithm will greedily expand the node with the highest score so far, stopping as soon as it founds a solution.
 
 The images bellow illustrate this __Greedy Algorithm__ applied to our [already familiar sequences](/sequence_alignments_2#external1):
 
@@ -165,15 +170,15 @@ Click on the left and right arrows, or in the bottom circles to navigate the ste
 
 In the first step, the algorithm starts with an _empty_ alignment ($$\text{empty} \in Aln_{0,0}$$) with a score of zero, and "expands" it by applying the three possible operations:
 
-- __INSERT__ in $$A_1$$, obtaining the partial alignment $$\text{(P/-)} \in Aln_{1,0}$$ with a score of -2.
-- __MATCH__ between $$A_1$$ and $$B_1$$, obtaining $$\text{(P/P)} \in Aln_{1,1}$$ with a score of 3.
-- __DELETION__ of $$A_i$$, obtaining $$\text{(-/P)} \in Aln_{0,1}$$ with a score of -2.
+- __GAP__ in $$B_1$$ (consumes $$A_1$$), obtaining the partial alignment $$\text{(P/-)} \in Aln_{1,0}$$ with a score of -2.
+- __MATCH__ $$A_1$$ and $$B_1$$, obtaining $$\text{(P/P)} \in Aln_{1,1}$$ with a score of 3.
+- __GAP__ in $$A_1$$ (consumes $$B_1$$), obtaining $$\text{(-/P)} \in Aln_{0,1}$$ with a score of -2.
 
 Next, it chooses the best node found so far (thus the __greedy__ in the algorithm's name) and repeats the same expansion process. The algorithm keeps "expanding" the best node, until it finds a solution (i.e. an alignment that consumes all letters of both sequences).
 
 As it progresses, the algorithm recursively builds a ternary tree that contains in its leaves many possible alignments.
 
-Note that, due to the accumulation of gaps and mismatches, in some steps (e.g. steps 4 and 7), the next best alignment to be expanded (red box) isn't always a child of previously expanded one (green box). In these cases the algorithm "backtracks" to expand other branches of the tree.
+Note that, due to the accumulation of gaps and mismatches, in some steps (e.g. steps 4 and 7), the next best alignment to be expanded (red box) isn't always a child of previously expanded one (green box). In these cases the algorithm "backtracks" to explore other branches of the tree.
 
 Although the algorithm seems to be, at a first glance, pretty effective, it has a major flaw. __As it usually occurs with Greedy algorithms, it often fails to find the optimal alignment__.
 
@@ -181,7 +186,7 @@ Take, for example, this other pair of sequences, <code class="python">ABC</code>
 
 {% include slideshow.html slideshow=page.greedy2 %}
 
-As we can see in this example, the greediness of the algorithm, and the fact that it stops as soon as it founds the first solution, leads to the following solution $$(\text{ABC---/ABXABC}) \in Aln_{3,6}$$ __which is not the optimal one__:
+As we can see in this example, the greediness of the algorithm, and the fact that it stops as soon as it founds the first solution, leads to the solution $$(\text{ABC---/ABXABC}) \in Aln_{3,6}$$ __which is not the optimal alignment__:
 
 {% highlight markdown %}
     ABC---
@@ -191,7 +196,7 @@ As we can see in this example, the greediness of the algorithm, and the fact tha
 
 $$(2 \times 3) + (1 \times -1) + (3 \times -2) = -1$$
 
-How do I know this is not the optimal alignment? Because, with a little manual effort, I can find the alignment $$(\text{AB---C/ABXABC}) \in Aln_{3,6}$$ which has a higher score:
+How do I know this is not the optimal alignment? Because, with a little manual effort, I can find another alignment: $$(\text{AB---C/ABXABC}) \in Aln_{3,6}$$ which has a higher score:
 
 {% highlight markdown %}
     AB---C
@@ -201,7 +206,7 @@ How do I know this is not the optimal alignment? Because, with a little manual e
 
 $$(3 \times 3) + (0 \times -1) + (3 \times -2) = 3$$
 
-Of course that, for all but the shortest alignments, it is impossible to manually verify if a specific solution is the optimal one or not. The point I am making here is that, with this simple counter-example, I can prove that the Greedy approach some times fails.
+Of course that, for all but the shortest pairs of sequences, it is impossible to manually verify if a specific solution is the optimal one or not. The point I am making here is that, with this simple counter-example, I can prove that the Greedy approach some times fails.
 
 At least in the sequence alignment world, greed doesn't pay of.
 

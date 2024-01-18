@@ -1,14 +1,12 @@
-# Seq Align
+# Sequence Alignments
 
 This repository contains the companion code for the [How to Compare Text with Sequence Alignment
 Algorithms](https://jaclx5.github.io/sequence_alignments_1) blog post series.
 
-# `alignment_tree` folder
+The `alignment_tree` folder contains the code used to generate the alignment tree images for the
+blog. Inside it you can find:
 
-This folder contains the code used to generate the alignment tree images for the blog. Inside it
-you can find:
-
-- The `dalt` (from __d__rawing __al__ignment __t__rees acronym) package which exposes an API to
+- The `dalt` (from __d__rawing __al__ignment __t__rees acronym) package that exposes an API to
   draw the trees and explore alignment alogrithms.
 - The `demo.ipynb` notebook with the code to generate the tree images for the post.
 
@@ -47,12 +45,12 @@ __It's important to note that the algorithms in this package ARE NOT efficient a
 to be used in any practical way. They were developed uniquely to illustrate the concepts in this
 blog and to generate graphical representations of alignments for pedagogic purposes.__
 
-- `AlgorithmGreedy` (algorithm_greedy.py): Implements the greedy algorithm described in the [Third
-  Post](https://jaclx5.github.io/sequence_alignments_3) of the series. Allways explore the best
-  non expanded node and stops as soon as it finds a solution.
+- `AlgorithmGreedy` (algorithm_greedy.py): Implements the greedy algorithm as described in the
+  [Third Post](https://jaclx5.github.io/sequence_alignments_3) of the series. It allways explore
+  the best non expanded node and stops as soon as it finds a solution.
   
-- `AlgorithmBruteForce` (algorithm_greedy.py): Implements the greedy algorithm described in the [Third
-  Post](https://jaclx5.github.io/sequence_alignments_3) of the series. Allways explore the best
-  non expanded node and stops as soon as it finds a solution.
+- `AlgorithmBruteForce` (algorithm_greedy.py): Implements the Brute Force algorithm as described in
+  the [Third Post](https://jaclx5.github.io/sequence_alignments_3) of the series. It explores all
+  possible alignments, not very practical indeed!
 
   
